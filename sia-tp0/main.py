@@ -3,6 +3,8 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
+import seaborn as sns
+
 from src.catching import attempt_catch
 from src.pokemon import PokemonFactory, StatusEffect
 
@@ -77,20 +79,67 @@ if __name__ == "__main__":
     
     # 2.
     # a)
-    columns = ["Pokeballs", "Effect", "Rate"]
-    df = pd.DataFrame(columns=columns)
-    for pokeball in pokeballs:
-        for effect in StatusEffect:
+
+    # columns = ["Pokeballs", "Effect", "Rate"]
+    # df = pd.DataFrame(columns=columns)
+
+    # for pokeball in pokeballs:
+    #     for effect in StatusEffect:
+    #         total_success = 0
+    #         total_try = 0
+
+    #         # Iterate through each pokemon name
+    #         for pokemon_name in pokemons_name:
+    #             pokemon = factory.create(pokemon_name, 100, effect, 1)
+    #             success, iters = run_iteration(pokemon, pokeball, 50, 0)
+    #             total_success += success
+    #             total_try += iters
+    #         new_row = {"Pokeballs": pokeball, "Effect": effect.name, "Rate": total_success/total_try}
+    #         df = df._append(new_row, ignore_index=True)
+    # # print(df)
+    # fig = px.bar(df, x="Pokeballs", y="Rate", color="Effect", barmode="group")
+    # fig.show()
+
+    
+
+    # b)
+    # Only using "snorlax" as a pokemon
+
+    columns = ["Pokeballs", "Effect", "Rate", "Health"]    
+    points = 1500
+    healths = [i/points for i in range(points+1)]
+
+    df2 = pd.DataFrame(columns=columns)
+    # pokeballs = ["ultraball"]
+    StatusEffect = [StatusEffect.NONE]
+
+    for pokeball in pokeballs:              # 4 pokeballs
+
+        for effect in StatusEffect:         # 5 satuseffects
             total_success = 0
             total_try = 0
-            # Iterate through each pokemon name
-            for pokemon_name in pokemons_name:
-                pokemon = factory.create(pokemon_name, 100, effect, 1)
+
+            for healt in healths:           # 4 healths
+
+                pokemon = factory.create("snorlax", 100, effect, healt)
                 success, iters = run_iteration(pokemon, pokeball, 50, 0)
                 total_success += success
                 total_try += iters
-            new_row = {"Pokeballs": pokeball, "Effect": effect.name, "Rate": total_success/total_try}
-            df = df._append(new_row, ignore_index=True)
-    print(df)
-    fig = px.bar(df, x="Pokeballs", y="Rate", color="Effect", barmode="group")
+                new_row = {"Pokeballs": pokeball, "Effect": effect.name, "Rate": total_success/total_try, "Health": healt}
+                df2 = df2._append(new_row, ignore_index=True)
+    
+    # fig = px.bar(df2, x="Pokeballs", y="Rate", color="Effect", barmode="group")
+    fig = px.scatter(df2, x="Health", y="Rate", color="Pokeballs")
+    
+    fig.update_layout(title="Success rate only for snorlax with four balls, no effect and different healths")
+
     fig.show()
+
+
+    # df2.to_csv("data_test_1.csv", index=False)
+
+    # plt.figure(figsize=(10, 10))
+    # #create a scatterplot with health on the x-axis and rate on the y-axis
+
+    # print(df2)
+    # print('nothing happened')
