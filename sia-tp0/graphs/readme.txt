@@ -1,0 +1,4 @@
+You can open the html files in your browser, just double click the files. The plots for 2c show several graphs with several results of the catch rate. In general, the higher the point in the graph the better. Hover over the individual points to see the different parameters per point. In this question i guess it's important to find the best parameters like health (always displayed on the x-axis), effect, pokeball and pokemon. Idk how to interpret it but it should be possible with this plot.
+
+2c scatter plot 1 only has 4 pokemons because i think the graph is more clear in this way (caterpie is not used)
+2c scatter plot 2 has all the pokemons so the plot is a bit more busy 
