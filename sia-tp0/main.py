@@ -33,49 +33,49 @@ if __name__ == "__main__":
     pokeballs = config["pokeballs"]
     pokemons_name = config["pokemons"]
     
-    # # 1.
-    # # Initialize a list to store general pokeball success rates
-    # general_pokeball_success_rate = []
-    # # Iterate through each pokeball type
-    # for pokeball in pokeballs:
-    #     total_success = 0
-    #     total_try = 0
-    #     # Initialize lists to store success rates and x-axis labels
-    #     pokeball_success_rate = []
-    #     x_axis = pokemons_name.copy()  # Make a copy to avoid modifying the original list
-    #     # Iterate through each pokemon name
-    #     for pokemon_name in pokemons_name:
-    #         pokemon = factory.create(pokemon_name, 100, StatusEffect.NONE, 1)
-    #         success, iters = run_iteration(pokemon, pokeball, 100, 0)
-    #         pokeball_success_rate.append(success / iters)
-    #         total_success += success
-    #         total_try += iters
+    # 1.
+    # Initialize a list to store general pokeball success rates
+    general_pokeball_success_rate = []
+    # Iterate through each pokeball type
+    for pokeball in pokeballs:
+        total_success = 0
+        total_try = 0
+        # Initialize lists to store success rates and x-axis labels
+        pokeball_success_rate = []
+        x_axis = pokemons_name.copy()  # Make a copy to avoid modifying the original list
+        # Iterate through each pokemon name
+        for pokemon_name in pokemons_name:
+            pokemon = factory.create(pokemon_name, 100, StatusEffect.NONE, 1)
+            success, iters = run_iteration(pokemon, pokeball, 100, 0)
+            pokeball_success_rate.append(success / iters)
+            total_success += success
+            total_try += iters
         
-    #     # Calculate and append the total success rate for the pokeball
-    #     pokeball_success_rate.append(total_success / total_try)
-    #     x_axis.append("Total")
+        # Calculate and append the total success rate for the pokeball
+        pokeball_success_rate.append(total_success / total_try)
+        x_axis.append("Total")
         
-    #     general_pokeball_success_rate.append(total_success / total_try)
+        general_pokeball_success_rate.append(total_success / total_try)
         
-    #     # b) Create a DataFrame and plot a bar chart
-    #     data = {
-    #         "Pokemons": x_axis,
-    #         "Success_Rate": pokeball_success_rate, 
-    #     }
-    #     df = pd.DataFrame(data)
-    #     # print(df)
-    #     fig = px.bar(df, x="Pokemons", y="Success_Rate", color="Pokemons", text_auto=True, title=f"Success rate for each pokemon for {pokeball}")
-    #     # fig.show()
+        # b) Create a DataFrame and plot a bar chart
+        data = {
+            "Pokemons": x_axis,
+            "Success_Rate": pokeball_success_rate, 
+        }
+        df = pd.DataFrame(data)
+        # print(df)
+        fig = px.bar(df, x="Pokemons", y="Success_Rate", color="Pokemons", text_auto=True, title=f"Success rate for each pokemon for {pokeball}")
+        # fig.show()
     
-    # # a) Create a DataFrame for general pokeball success rates and plot a bar chart
-    # data = {
-    #     "Pokeballs": pokeballs,
-    #     "Success_Rate": general_pokeball_success_rate,
-    # }
-    # df = pd.DataFrame(data)
-    # print(df)
-    # fig = px.bar(df, x="Pokeballs", y="Success_Rate", color="Pokeballs", text_auto=True, title="General success rate for each Pokeball")
-    # fig.show()
+    # a) Create a DataFrame for general pokeball success rates and plot a bar chart
+    data = {
+        "Pokeballs": pokeballs,
+        "Success_Rate": general_pokeball_success_rate,
+    }
+    df = pd.DataFrame(data)
+    print(df)
+    fig = px.bar(df, x="Pokeballs", y="Success_Rate", color="Pokeballs", text_auto=True, title="General success rate for each Pokeball")
+    fig.show()
     
     # 2.
     # a)
