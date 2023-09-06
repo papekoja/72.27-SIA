@@ -3,7 +3,8 @@ import math
 import numpy as np
 
 class Character:
-    
+    #The gene1 consists of repetitions of each letters in character where the number of repetitions is the value of the attribute.
+    #The gene2 is the binary representation of the height of the character.
     def __init__(self, type, strength, agility, expertise, resistance, health, height, gene1=None, gene2=None):
         self.type = type
         self.gene1 = []
@@ -45,7 +46,7 @@ class Character:
             + str(self.health) + ',' 
             + str(self.height) + ')')
          
-    def get_finess(self):
+    def get_fitness(self):
         strengh_p = 100 * np.tanh(0.01 * self.strength)
         agility_p = np.tanh(0.01 * self.agility)
         expertise_p = 0.6 * np.tanh(0.01 * self.expertise)
