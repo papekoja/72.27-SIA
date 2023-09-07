@@ -19,8 +19,10 @@ selection_method = str(config['GeneticAlgorithm']['selection_method'])
 
 character = Character("warrior", 30, 30, 30, 30, 30, 1.6)
 # print(character)
-mutate_population([character], 20, False)
+# mutate_population([character], 20, False)
 # print(character)
+
+
 result = genetic_algorithm(amount_parents, number_iterations, selection_method)
 
 

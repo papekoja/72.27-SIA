@@ -3,21 +3,34 @@ import math
 import random
 from src.character import Character
 
+
+def crossing_operator(parent1, parent2, is_gene1_mutating, is_gene2_mutating, selection_algorithm):
+    if selection_algorithm == "one_point":
+        return one_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating)
+    elif selection_algorithm == "two_point":
+        return two_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating)
+    elif selection_algorithm == "uniform":
+        return uniform_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating)
+
+
+
 def one_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
+    child1_new_gene1 = parent1.gene1
+    child2_new_gene1 = parent2.gene1
+    child1_new_gene2 = parent1.gene2
+    child2_new_gene2 = parent2.gene2
+
     if is_gene1_mutating:
-        child1_new_gene1 = []
-        child2_new_gene1 = []
         p = random.randint(0, 149)
-        # temp = parent1.gene1[0:p]
+        temp = parent1.gene1[0:p]
         child1_new_gene1 = parent2.gene1[0:p] + parent1.gene1[p:]
         child2_new_gene1 = parent1.gene1[0:p] + parent2.gene1[p:]
     elif is_gene2_mutating:
-        child1_new_gene2 = []
-        child2_new_gene2 = []
         p = random.randint(0, 5)
+        
         child1_new_gene2 = parent2.gene2[0:p] + parent1.gene2[p:]
         child2_new_gene2 = parent1.gene2[0:p] + parent2.gene2[p:]
-          
+
     child1 = Character(parent1.type, None, None, None, None, None, None, child1_new_gene1, child1_new_gene2)
     child2 = Character(parent1.type, None, None, None, None, None, None, child2_new_gene1, child2_new_gene2)
     return child1, child2

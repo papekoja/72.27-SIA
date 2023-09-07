@@ -5,7 +5,7 @@ import numpy
 import configparser
 
 from src.character import Character
-from src.crossing_operators import one_point_crossing
+from src.crossing_operators import crossing_operator
 from src.selection_methods import selection_method, elite_selection
 
 config = configparser.ConfigParser()
@@ -16,46 +16,43 @@ def genetic_algorithm(number_parents, number_iterations, method):
     population = []
     generation_tracker = {}
     generation = 0
-    sum = 0
+    total_sum = 0
     
     # Generation 1
-    for i in range(number_parents):             # Create i amount of characters in population
+    for i in range(number_parents):
         s, a, e, r, h, height = random_stats_generator()
         population.append(Character(character_type, s, a, e, r, h, height))
-        sum += population[i].get_fitness()
+        total_sum += population[i].get_fitness()
 
-    avg_fitness = sum / len(population)
+    avg_fitness = total_sum / len(population)
     generation_tracker[generation] = avg_fitness
 
 
     # Generation 2 to n
-    for i in range(number_iterations):
-        selection_algorigthm = method
-        population = selection_method(population, selection_algorigthm)
-        population = population + population  
-        
-        dummy = 0
-        for j in range(len(population)):
-            dummy += population[j].get_fitness()
-        total = dummy / len(population)
+    # Here, implement the selection method.
+    for generation in range(1, number_iterations + 1):
+        population = selection_method(population, method)
+        population += population                    # TODO - Now it assumes a 50 50 split. In te config.ini, a percentage is stated. Maybe look at this later on.
 
-        generation_tracker[generation[i]] = total
+        total_fitness = sum(character.get_fitness() for character in population)
+        avg_fitness = total_fitness / len(population)
 
-        # Get population fitness
-        # # total = sum(population[j].get_fitness() for j in range(len(population)))
-        # print(total)
-        # avg_fitness = total / len(population)
-        # print(avg_fitness)
 
-        # TODO - Cross
-        # ch1, ch2, = one_point_crossing(character_dict, character_dict, True, True)
+        # TODO - Cross - This doesn't seem to affect anything yet....
+        for i, j in zip(range(0, len(population), 2), range(1, len(population), 2)):
+            ch1_parrent = population[i]
+            ch2_parrent = population[j]
+            ch1, ch2, = crossing_operator(ch1_parrent, ch2_parrent, True, False, "one_point")
+
+            # TODO - place the ch1 and ch2 in the population so that it replaces the entire old population
+            # population[i] = ch1
+            # population[j] = ch2
 
 
         # TODO - Mutate
-
-        # avg_fitness = sum(character_dict['fitness'] for character_dict in population) / len(population)
         
-        # generation_tracker[generation] = avg_fitness
+
+        generation_tracker[generation] = avg_fitness
 
     print(generation_tracker)
 
@@ -73,8 +70,6 @@ def avg_fitness(fitness_dict):
     
     return average_fitness
 
-
-
 def random_stats_generator():
     while True:
         strength = random.randint(1, 100)
@@ -89,30 +84,6 @@ def random_stats_generator():
         # Check if the sum is equal to 150
         if total == 150:
             break  # Exit the loop if the constraint is met
-
-        
-        
-        # TODO - this is if we fix the int-float item problem
-
-        # # Generate five random floats between 0 and 100
-        # strength = random.uniform(0, 100)
-        # agility = random.uniform(0, 100)
-        # expertise = random.uniform(0, 100)
-        # resistance = random.uniform(0, 100)
-        # health = random.uniform(0, 100)
-
-        # # Calculate the sum of the five attributes
-        # total = strength + agility + expertise + resistance + health
-
-        # # Adjust the values to ensure the sum is 150
-        # scaling_factor = 150 / total
-        # strength *= scaling_factor
-        # agility *= scaling_factor
-        # expertise *= scaling_factor
-        # resistance *= scaling_factor
-        # health *= scaling_factor
-
-    # Generate a random height within the specified range
     height = random.uniform(1.3, 2.0)
 
     return strength, agility, expertise, resistance, health, height

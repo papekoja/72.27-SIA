@@ -32,12 +32,13 @@ class Character:
             self.expertise = gene1.count('e')
             self.resistance = gene1.count('r')
             self.health = gene1.count('h')
-            
+
             binary_string = ''.join(str(bit) for bit in gene2)
             decimal_integer = int(binary_string, 2)
-            self.height = 1,3 + (70 / 64)*decimal_integer/100
+            self.height = 1.3 + (decimal_integer / (2**len(gene2) - 1)) * 0.7
 
-        self.fitness = self.get_fitness()
+
+        # self.fitness = self.get_fitness()
 
     def __str__(self):
          return (str(self.type) + 
