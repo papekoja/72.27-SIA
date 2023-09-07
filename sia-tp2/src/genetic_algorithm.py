@@ -3,8 +3,84 @@ import random
 import copy
 import numpy
 
+from src.character import Character
+from src.crossing_operators import one_point_crossing
+from src.selection_methods import selection_method
 
-limit_generation = 1000
+
+
+def genetic_algorithm(number_parents, number_iterations):
+    fitness_dict = {}
+    
+    # Gen 1
+    # This creates an n amount of characters defined in main.py. This is only for the first generation
+
+    # TODO - store the enire character object in the dictionary
+    for i in range(number_parents):
+        s, a, e, r, h, height = random_stats_generator()
+        character = Character('warrior', s, a, e, r, h, height)
+        fitness_dict[i] = character.gene1
+    
+
+    # TODO - avg fitness doesn't work because i haven't stored the entire character object in the dictionary.
+    # avg = avg_fitness(fitness_dict)
+    print(character.gene1)
+
+    population = {1:1, 2:2, 3:3, 4:4, 5:5}
+    # selection method
+    selection_method(population, )
+
+
+
+
+    # Gen 2 (for now because number_iterations = 2)
+    p1 = 1
+    p2 = 2
+    for i in range(number_iterations - 1):
+        one_point_crossing(p1, p2, False, False)
+        
+        character_v2 = Character('warrior', None, None, None, None, None, None, character.gene1, character.gene2)
+
+    print(avg)
+
+
+
+
+
+
+def avg_fitness(fitness_dict):
+    total_fitness = sum(fitness_dict.values())  # Sum of all fitness values
+    num_characters = len(fitness_dict)          # Number of characters in the dictionary
+    average_fitness = total_fitness / num_characters
+    
+    return average_fitness
+
+
+# TODO Change this method in a cleaner way...
+# I know this is a bit of a random bruteforce way of doing it. Might change this later
+def random_stats_generator():
+    while True:
+        strength = random.randint(1, 100)
+        agility = random.randint(1, 100)
+        expertise = random.randint(1, 100)
+        resistance = random.randint(1, 100)
+        health = random.randint(1, 100)
+
+        # Calculate the sum of attributes
+        total = strength + agility + expertise + resistance + health
+
+        # Check if the sum is equal to 150
+        if total == 150:
+            break  # Exit the loop if the constraint is met
+
+    # Generate a random height within the specified range
+    height = random.uniform(1.3, 2.0)
+
+    return strength, agility, expertise, resistance, health, height
+
+
+
+
 
 # Se generan dos hijos por pareja, de ellos se toma uno random
 # De la poblacion vieja se toma la mitad tambien

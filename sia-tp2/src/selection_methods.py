@@ -2,7 +2,7 @@ import numpy as np
 import math
 import copy
 import random
-from character import Character
+from src.character import Character
 
 PROBABILISTIC_TOURNAMENT_VALUE = 0.75
 

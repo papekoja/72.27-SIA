@@ -22,7 +22,7 @@ class Character:
                 for i in range(attr):
                     self.gene1.append(char)
             
-            binary_representation = bin(int((height-1,3)*100))[2:]  # Get binary representation and remove '0b' prefix
+            binary_representation = bin(int((height-1.3)*100))[2:]  # Get binary representation and remove '0b' prefix
             binary_representation = '0' * (6 - len(binary_representation)) + binary_representation
             self.gene2 = [int(bit) for bit in binary_representation]
             
@@ -75,19 +75,19 @@ class Character:
                     self.height == other_character.height)
         return False
     
-    def __executeMutation(self,value):
-        mutated_val = getbinary(value, 8)
-        for i in range(8):
-            if np.random.uniform() > self.pm:
-                if mutated_val[i] == '0':
-                    mutated_val = mutated_val[:i] + '1' + mutated_val[i + 1:]
-                else:
-                    mutated_val = mutated_val[:i] + '0' + mutated_val[i + 1:]
-        return int(mutated_val, 2)
+    # def __executeMutation(self,value):
+    #     mutated_val = getbinary(value, 8)
+    #     for i in range(8):
+    #         if np.random.uniform() > self.pm:
+    #             if mutated_val[i] == '0':
+    #                 mutated_val = mutated_val[:i] + '1' + mutated_val[i + 1:]
+    #             else:
+    #                 mutated_val = mutated_val[:i] + '0' + mutated_val[i + 1:]
+    #     return int(mutated_val, 2)
 
-    def mutate(self):
-        self.red = self.__executeMutation(self.red) 
-        self.green = self.__executeMutation(self.green) 
-        self.blue = self.__executeMutation(self.blue) 
+    # def mutate(self):
+    #     self.red = self.__executeMutation(self.red) 
+    #     self.green = self.__executeMutation(self.green) 
+    #     self.blue = self.__executeMutation(self.blue) 
 
         

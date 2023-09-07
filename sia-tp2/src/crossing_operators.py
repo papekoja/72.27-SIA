@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import random
-from character import Character
+from src.character import Character
 
 def one_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
     if is_gene1_mutating:
