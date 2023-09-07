@@ -20,15 +20,17 @@ def genetic_algorithm(number_parents, number_iterations):
         s, a, e, r, h, height = random_stats_generator()
         character = Character('warrior', s, a, e, r, h, height)
         fitness_dict[i] = character.gene1
+
+
     
 
     # TODO - avg fitness doesn't work because i haven't stored the entire character object in the dictionary.
     # avg = avg_fitness(fitness_dict)
     print(character.gene1)
 
-    population = {1:1, 2:2, 3:3, 4:4, 5:5}
-    # selection method
-    selection_method(population, )
+    # population = {1:1, 2:2, 3:3, 4:4, 5:5}
+    # # selection method
+    # selection_method(population, "elite")
 
 
 
@@ -36,12 +38,12 @@ def genetic_algorithm(number_parents, number_iterations):
     # Gen 2 (for now because number_iterations = 2)
     p1 = 1
     p2 = 2
-    for i in range(number_iterations - 1):
-        one_point_crossing(p1, p2, False, False)
+    # for i in range(number_iterations - 1):
+    #     one_point_crossing(p1, p2, False, False)
         
-        character_v2 = Character('warrior', None, None, None, None, None, None, character.gene1, character.gene2)
+    #     character_v2 = Character('warrior', None, None, None, None, None, None, character.gene1, character.gene2)
 
-    print(avg)
+
 
 
 
