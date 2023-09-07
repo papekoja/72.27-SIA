@@ -17,10 +17,9 @@ def one_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
         p = random.randint(0, 5)
         child1_new_gene2 = parent2.gene2[0:p] + parent1.gene2[p:]
         child2_new_gene2 = parent1.gene2[0:p] + parent2.gene2[p:]
-        
+          
     child1 = Character(parent1.type, None, None, None, None, None, None, child1_new_gene1, child1_new_gene2)
     child2 = Character(parent1.type, None, None, None, None, None, None, child2_new_gene1, child2_new_gene2)
-    
     return child1, child2
 
 def two_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
@@ -81,10 +80,3 @@ def uniform_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
     child2 = Character(parent1.type, None, None, None, None, None, None, child2_new_gene1, child2_new_gene2)
 
     return child1, child2
-
-# def anular_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
-#     if is_gene1_mutating:
-#         p = random.randint(0, 149)
-#         l = random.randint(0, math.ceil(150/2))
-#         while 
-        

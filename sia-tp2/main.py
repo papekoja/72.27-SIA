@@ -10,6 +10,7 @@ selection_method = 'elite'
 
 result = genetic_algorithm(number_parents, number_iterations, selection_method)
 
+
 # print(result)
 
 

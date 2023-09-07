@@ -77,17 +77,15 @@ class Character:
                     self.height == other_character.height)
         return False
     
-    # def __executeMutation(self,value):
-    #     mutated_val = getbinary(value, 8)
-    #     for i in range(8):
-    #         if np.random.uniform() > self.pm:
-    #             if mutated_val[i] == '0':
-    #                 mutated_val = mutated_val[:i] + '1' + mutated_val[i + 1:]
-    #             else:
-    #                 mutated_val = mutated_val[:i] + '0' + mutated_val[i + 1:]
-    #     return int(mutated_val, 2)
+    #getters and setters for gene1 and gene2
+    def get_gene1(self):
+        return self.gene1
+    
+    def get_gene2(self):
+        return self.gene2
+    
+    def set_gene1(self, gene1):
+        self.gene1 = gene1
 
-    # def mutate(self):
-    #     self.red = self.__executeMutation(self.red) 
-    #     self.green = self.__executeMutation(self.green) 
-    #     self.blue = self.__executeMutation(self.blue) 
+    def set_gene2(self, gene2):
+        self.gene2 = gene2
