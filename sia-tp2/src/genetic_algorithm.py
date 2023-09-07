@@ -9,39 +9,49 @@ from src.selection_methods import selection_method
 
 
 
-def genetic_algorithm(number_parents, number_iterations):
-    fitness_dict = {}
+def genetic_algorithm(number_parents, number_iterations, method):
+    population = []
     
     # Gen 1
     # This creates an n amount of characters defined in main.py. This is only for the first generation
-
-    # TODO - store the enire character object in the dictionary
     for i in range(number_parents):
         s, a, e, r, h, height = random_stats_generator()
         character = Character('warrior', s, a, e, r, h, height)
-        fitness_dict[i] = character.gene1
-    
+        
+        character_dict = {
+            'type': character.type,
+            'fitness': character.get_fitness(),
+            'strength': character.strength,
+            'agility': character.agility,
+            'expertise': character.expertise,
+            'resistance': character.resistance,
+            'health': character.health,
+            'height': character.height,
+            # 'gene1': character.gene1,                     # delete this for now
+            'gene2': character.gene2
+        }
+        
+        population.append(character_dict)
 
-    # TODO - avg fitness doesn't work because i haven't stored the entire character object in the dictionary.
-    # avg = avg_fitness(fitness_dict)
-    print(character.gene1)
+    # Get the average fitness - is important for tracking the performance of each algorighm and make graphs
+    avg_fitness = sum(character_dict['fitness'] for character_dict in population) / len(population)
+    print(f"Average fitness: {avg_fitness}")
+    print(population[0])
 
-    population = {1:1, 2:2, 3:3, 4:4, 5:5}
-    # selection method
-    selection_method(population, )
-
-
+    # # selection method
+    selection_method(population, method)
 
 
+    # TODO - do the crossing method for gen2
     # Gen 2 (for now because number_iterations = 2)
     p1 = 1
     p2 = 2
-    for i in range(number_iterations - 1):
-        one_point_crossing(p1, p2, False, False)
+    # for i in range(number_iterations - 1):
+    #     one_point_crossing(p1, p2, False, False)
         
-        character_v2 = Character('warrior', None, None, None, None, None, None, character.gene1, character.gene2)
+    #     character_v2 = Character('warrior', None, None, None, None, None, None, character.gene1, character.gene2)
 
-    print(avg)
+
 
 
 

@@ -37,6 +37,8 @@ class Character:
             decimal_integer = int(binary_string, 2)
             self.height = 1,3 + (70 / 64)*decimal_integer/100
 
+        self.fitness = self.get_fitness()
+
     def __str__(self):
          return (str(self.type) + 
             '(' + str(self.strength) + ',' 
