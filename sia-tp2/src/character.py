@@ -89,5 +89,3 @@ class Character:
     #     self.red = self.__executeMutation(self.red) 
     #     self.green = self.__executeMutation(self.green) 
     #     self.blue = self.__executeMutation(self.blue) 
-
-        
