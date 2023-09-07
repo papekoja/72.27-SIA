@@ -8,24 +8,26 @@ PROBABILISTIC_TOURNAMENT_VALUE = 0.75
 
 def selection_method(population, selection_algorithm):
     if selection_algorithm == "elite":
-        elite_selection(population)
+        return elite_selection(population)  # Return the result of elite selection
     elif selection_algorithm == "roulette":
-        roulette_selection(population)
+        return roulette_selection(population)
     elif selection_algorithm == "universal":
-        universal_selection(population)
+        return universal_selection(population)
     elif selection_algorithm == "boltzmann":
-        boltzmann_selection(population)
-    elif selection_algorithm=="determinist_tournament":
-         determinist_tournament_selection(population)
-    elif selection_algorithm=="probabilistic_tournament":
-         probabilistic_tournament_selection(population)
+        return boltzmann_selection(population)
+    elif selection_algorithm == "determinist_tournament":
+        return determinist_tournament_selection(population)
+    elif selection_algorithm == "probabilistic_tournament":
+        return probabilistic_tournament_selection(population)
     elif selection_algorithm == "rank":
-        rank_selection(population)
+        return rank_selection(population)
+
 
 
 def elite_selection(population):
     population.sort(key=lambda x: x['fitness'], reverse=True)
-    return population[0:math.ceil(len(population)/2)]
+    num_to_select = math.ceil(len(population) / 2)
+    return population[:num_to_select]
 
 def roulette_selection(population):
     total_fitness = sum(individual.get_fitness() for individual in population)
