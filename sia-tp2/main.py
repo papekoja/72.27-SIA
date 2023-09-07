@@ -4,26 +4,25 @@ import numpy as np
 
 from src.genetic_algorithm import genetic_algorithm
 
-number_parents = 100
-number_iterations = 2
-selection_method = 'elite'
+# Load the config file
+config = configparser.ConfigParser()
+config.read('config.ini')
 
-result = genetic_algorithm(number_parents, number_iterations, selection_method)
+# Get the parameters from the config file
+amount_parents = int(config['GeneticAlgorithm']['population_number'])
+number_iterations = int(config['GeneticAlgorithm']['max_generations'])
+selection_method = str(config['GeneticAlgorithm']['selection_method'])
 
-
-# print(result)
-
-
-
-
+result = genetic_algorithm(amount_parents, number_iterations, selection_method)
 
 
 
 
 
 
-# config = configparser.ConfigParser()
-# config.read('config.ini')
+
+
+
 
 # mutation_rate = config.getfloat('GeneticAlgorithm', 'mutation_rate')
 # selection_method = config.get('GeneticAlgorithm', 'selection_method')
