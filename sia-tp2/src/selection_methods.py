@@ -25,7 +25,8 @@ def selection_method(population, selection_algorithm):
 
 
 def elite_selection(population):
-    population.sort(key=lambda x: x['fitness'], reverse=True)
+    # population.sort(key=lambda x: x['fitness'], reverse=True)
+    population.sort(key=lambda x: x.get_fitness(), reverse=True)
     num_to_select = math.ceil(len(population) / 2)
     return population[:num_to_select]
 

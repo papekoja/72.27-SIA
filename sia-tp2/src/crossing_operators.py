@@ -8,7 +8,7 @@ def one_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
         child1_new_gene1 = []
         child2_new_gene1 = []
         p = random.randint(0, 149)
-        temp = parent1.gene1[0:p]
+        # temp = parent1.gene1[0:p]
         child1_new_gene1 = parent2.gene1[0:p] + parent1.gene1[p:]
         child2_new_gene1 = parent1.gene1[0:p] + parent2.gene1[p:]
     elif is_gene2_mutating:

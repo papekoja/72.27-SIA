@@ -18,9 +18,9 @@ selection_method = str(config['GeneticAlgorithm']['selection_method'])
 
 
 character = Character("warrior", 30, 30, 30, 30, 30, 1.6)
-print(character)
+# print(character)
 mutate_population([character], 20, False)
-print(character)
+# print(character)
 result = genetic_algorithm(amount_parents, number_iterations, selection_method)
 
 
@@ -42,4 +42,4 @@ result = genetic_algorithm(amount_parents, number_iterations, selection_method)
 # # Accéder aux caractéristiques d'un personnage
 # warrior_attributes = characters_data['warrior']
 # archer_attributes = characters_data['archer']
->>>>>>> 8a514e82bd6344118bba990348d85b0749dc5cfa
+

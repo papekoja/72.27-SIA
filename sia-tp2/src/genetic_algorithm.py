@@ -16,47 +16,46 @@ def genetic_algorithm(number_parents, number_iterations, method):
     population = []
     generation_tracker = {}
     generation = 0
+    sum = 0
     
-    # Gen 1
-    # This creates an n amount of characters defined in main.py. This is only for the first generation
-    for i in range(number_parents):
+    # Generation 1
+    for i in range(number_parents):             # Create i amount of characters in population
         s, a, e, r, h, height = random_stats_generator()
-        character = Character(character_type, s, a, e, r, h, height)
-        
-        character_dict = {
-            'type': character.type,
-            'fitness': character.get_fitness(),
-            'strength': character.strength,
-            'agility': character.agility,
-            'expertise': character.expertise,
-            'resistance': character.resistance,
-            'health': character.health,
-            'height': character.height,
-            # 'gene1': character.gene1,                     # delete this for now, or use??
-            'gene2': character.gene2
-        }
-        
-        population.append(character_dict)
+        population.append(Character(character_type, s, a, e, r, h, height))
+        sum += population[i].get_fitness()
 
-    # Get the average fitness - is important for tracking the performance of each algorighm and make graphs
-    avg_fitness = sum(character_dict['fitness'] for character_dict in population) / len(population)
-    generation_tracker[generation] = avg_fitness        # add the avg fitness to the generation tracker dict
+    avg_fitness = sum / len(population)
+    generation_tracker[generation] = avg_fitness
 
 
+    # Generation 2 to n
     for i in range(number_iterations):
         selection_algorigthm = method
         population = selection_method(population, selection_algorigthm)
+        population = population + population  
+        
+        dummy = 0
+        for j in range(len(population)):
+            dummy += population[j].get_fitness()
+        total = dummy / len(population)
+
+        generation_tracker[generation[i]] = total
+
+        # Get population fitness
+        # # total = sum(population[j].get_fitness() for j in range(len(population)))
+        # print(total)
+        # avg_fitness = total / len(population)
+        # print(avg_fitness)
 
         # TODO - Cross
+        # ch1, ch2, = one_point_crossing(character_dict, character_dict, True, True)
+
+
         # TODO - Mutate
-        # TODO - Replace
-        population = population + population  
-        avg_fitness = sum(character_dict['fitness'] for character_dict in population) / len(population)
+
+        # avg_fitness = sum(character_dict['fitness'] for character_dict in population) / len(population)
         
-
-        generation += 1
-        generation_tracker[generation] = avg_fitness
-
+        # generation_tracker[generation] = avg_fitness
 
     print(generation_tracker)
 
