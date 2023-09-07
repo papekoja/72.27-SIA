@@ -6,8 +6,9 @@ from src.genetic_algorithm import genetic_algorithm
 
 number_parents = 100
 number_iterations = 2
+selection_method = 'elite'
 
-result = genetic_algorithm(number_parents, number_iterations)
+result = genetic_algorithm(number_parents, number_iterations, selection_method)
 
 # print(result)
 

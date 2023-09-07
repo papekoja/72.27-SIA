@@ -24,7 +24,7 @@ def selection_method(population, selection_algorithm):
 
 
 def elite_selection(population):
-    population.sort(key=lambda x: x.get_fitness(), reverse=True)
+    population.sort(key=lambda x: x['fitness'], reverse=True)
     return population[0:math.ceil(len(population)/2)]
 
 def roulette_selection(population):
