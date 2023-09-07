@@ -10,7 +10,7 @@ from src.selection_methods import selection_method
 
 
 def genetic_algorithm(number_parents, number_iterations):
-    fitness_dict = {}
+    population = []
     
     # Gen 1
     # This creates an n amount of characters defined in main.py. This is only for the first generation
@@ -19,14 +19,28 @@ def genetic_algorithm(number_parents, number_iterations):
     for i in range(number_parents):
         s, a, e, r, h, height = random_stats_generator()
         character = Character('warrior', s, a, e, r, h, height)
-        fitness_dict[i] = character.gene1
-
+        
+        character_dict = {
+            'character': character,
+            'fitness': character.get_fitness(),
+            'strength': character.strength,
+            'agility': character.agility,
+            'expertise': character.expertise,
+            'resistance': character.resistance,
+            'health': character.health,
+            'height': character.height,
+            'gene1': character.gene1,
+            'gene2': character.gene2
+        }
+        
+        population.append(character_dict)
 
     
 
+
     # TODO - avg fitness doesn't work because i haven't stored the entire character object in the dictionary.
     # avg = avg_fitness(fitness_dict)
-    print(character.gene1)
+    print(character.gene1, '\n\n', character.gene2)
 
     # population = {1:1, 2:2, 3:3, 4:4, 5:5}
     # # selection method
