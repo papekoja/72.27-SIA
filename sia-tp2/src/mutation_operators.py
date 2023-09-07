@@ -17,6 +17,7 @@ def mutate_population(population, pm, multigen = False):
 # Depending on the gene_index, the function will mutate the gene1 or the gene2.
 def mutate_gene(character, gene_index):
     if gene_index < 150:
-        character.gene1[gene_index] = random.choice(['s', 'a', 'e', 'r', 'h'])
+        character.gene1[gene_index] = np.random.choice(['s', 'a', 'e', 'r', 'h'])
     else:
-        character.gene2[gene_index] = 1 - character.gene2[gene_index]
+        print("gene2")
+        character.gene2[gene_index] = 1 - character.gene2[gene_index - 150]

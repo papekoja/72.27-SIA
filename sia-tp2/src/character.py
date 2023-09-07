@@ -76,16 +76,3 @@ class Character:
                     self.health == other_character.health and
                     self.height == other_character.height)
         return False
-    
-    #getters and setters for gene1 and gene2
-    def get_gene1(self):
-        return self.gene1
-    
-    def get_gene2(self):
-        return self.gene2
-    
-    def set_gene1(self, gene1):
-        self.gene1 = gene1
-
-    def set_gene2(self, gene2):
-        self.gene2 = gene2
