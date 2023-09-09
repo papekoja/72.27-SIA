@@ -12,11 +12,13 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 character_type = str(config['GeneticAlgorithm']['character_type'])
 
-def genetic_algorithm(number_parents, number_iterations, method):
+def genetic_algorithm(number_parents, number_iterations, method1, method2, selection_number, selection_probability):
     population = []
     generation_tracker = {}
     generation = 0
     total_sum = 0
+    selection_number1 = math.ceil(selection_number * selection_probability)
+    selection_number2 = selection_number - selection_number1
     
     # Generation 1
     for i in range(number_parents):
@@ -31,7 +33,9 @@ def genetic_algorithm(number_parents, number_iterations, method):
     # Generation 2 to n
     # Here, implement the selection method.
     for generation in range(1, number_iterations + 1):
-        population = selection_method(population, method)
+        selected_population1 = selection_method(population, method1, selection_number1)
+        selected_population2 = selection_method(population, method2, selection_number2)
+
         population += population                    # TODO - Now it assumes a 50 50 split. In te config.ini, a percentage is stated. Maybe look at this later on.
 
         total_fitness = sum(character.get_fitness() for character in population)

@@ -11,6 +11,8 @@ def crossing_operator(parent1, parent2, is_gene1_mutating, is_gene2_mutating, se
         return two_point_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating)
     elif selection_algorithm == "uniform":
         return uniform_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating)
+    elif selection_algorithm == "anular":
+        return anular_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating)
 
 
 
@@ -91,5 +93,38 @@ def uniform_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
     
     child1 = Character(parent1.type, None, None, None, None, None, None, child1_new_gene1, child1_new_gene2)
     child2 = Character(parent1.type, None, None, None, None, None, None, child2_new_gene1, child2_new_gene2)
+
+    return child1, child2
+
+
+def anular_crossing(parent1, parent2, is_gene1_mutating, is_gene2_mutating):
+    if is_gene1_mutating:
+        p1 = random.randint(0, 149)
+        l = random.randint(0, 75)
+        p2 = (p1 + l) % 150
+        if p1 > p2:
+            p1, p2 = p2, p1
+        temp1 = parent1.gene1[0:p1]
+        parent1.gene1[0:p1] = parent2.gene1[0:p1]
+        parent2.gene1[0:p1] = temp1
+        temp2 = parent1.gene1[p2:]
+        parent1.gene1[p2:] = parent2.gene1[p2:]
+        parent2.gene1[p2:] = temp2
+
+    if is_gene2_mutating:
+        p1 = random.randint(0, 5)
+        l = random.randint(0, 3)
+        p2 = (p1 + l) % 6
+        if p1 > p2:
+            p1, p2 = p2, p1
+        temp1 = parent1.gene1[0:p1]
+        parent1.gene1[0:p1] = parent2.gene1[0:p1]
+        parent2.gene1[0:p1] = temp1
+        temp2 = parent1.gene1[p2:]
+        parent1.gene1[p2:] = parent2.gene1[p2:]
+        parent2.gene1[p2:] = temp2
+
+    child1 = Character(parent1.type, None, None, None, None, None, None, parent1.gene1, parent1.gene2)
+    child2 = Character(parent1.type, None, None, None, None, None, None, parent2.gene1, parent2.gene2)
 
     return child1, child2

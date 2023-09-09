@@ -1,3 +1,6 @@
+import bisect
+from itertools import accumulate
+
 import numpy as np
 import math
 import copy
@@ -6,11 +9,11 @@ from src.character import Character
 
 PROBABILISTIC_TOURNAMENT_VALUE = 0.75
 
-def selection_method(population, selection_algorithm):
+def selection_method(population, selection_algorithm, selection_number):
     if selection_algorithm == "elite":
-        return elite_selection(population)  # Return the result of elite selection
+        return elite_selection(population, selection_number)  # Return the result of elite selection
     elif selection_algorithm == "roulette":
-        return roulette_selection(population)
+        return roulette_selection(population, selection_number)
     elif selection_algorithm == "universal":
         return universal_selection(population)
     elif selection_algorithm == "boltzmann":
@@ -24,17 +27,35 @@ def selection_method(population, selection_algorithm):
 
 
 
-def elite_selection(population):
-    # population.sort(key=lambda x: x['fitness'], reverse=True)
+def elite_selection(population, selection_number):
     population.sort(key=lambda x: x.get_fitness(), reverse=True)
-    num_to_select = math.ceil(len(population) / 2)
-    return population[:num_to_select]
+    selected_population = []
+    for index, individual in enumerate(population):
+        n = math.ceil((selection_number - index) / len(population))
+        for i in range(n):
+            selected_population.append(individual)
 
-def roulette_selection(population):
+    # population.sort(key=lambda x: x['fitness'], reverse=True)
+    # num_to_select = math.ceil(len(population) / 2)
+    return selected_population
+
+def roulette_selection(population, selection_number):
+    selected_population = []
     total_fitness = sum(individual.get_fitness() for individual in population)
-    selection_probabilities = [individual.get_fitness() / total_fitness for individual in population]
-    selected_individuals = np.random.choice(population, size=len(population)//2, replace=True, p=selection_probabilities) 
-    return selected_individuals.tolist()
+    relative_fitness = [individual.get_fitness() / total_fitness for individual in population]
+    accumulated_fitness = list(accumulate(relative_fitness))
+    random_numbers = [random.uniform(0, 1) for _ in range(selection_number)]
+    for number in random_numbers:
+        index = bisect.bisect_left(accumulated_fitness, number)     # Find the index where number should be inserted in accumulated_fitness
+        selected_population.append(population[index])
+
+    return selected_population
+
+    # total_fitness = sum(individual.get_fitness() for individual in population)
+    # relative_fitness = [individual.get_fitness() / total_fitness for individual in population]
+    # selection_probabilities = [individual.get_fitness() / total_fitness for individual in population]
+    # selected_individuals = np.random.choice(population, size=len(population)//2, replace=True, p=selection_probabilities)
+    # return selected_individuals.tolist()
 
 def universal_selection(population):
     population.sort(key=lambda x: x.get_fitness())
