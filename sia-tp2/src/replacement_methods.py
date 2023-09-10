@@ -1,4 +1,4 @@
-import numpy as np
+import random
 
 
 def replacement_method(population, replacement_algorithm, children):
@@ -10,10 +10,10 @@ def replacement_method(population, replacement_algorithm, children):
 
 def traditional_replacement(population, children):
     everyone = population + children
-    return np.random.choice(everyone, len(population))
+    return random.sample(everyone, len(population))
 
 
 def young_replacement(population, children):
     if len(children) > len(population):
-        return np.random.choice(children, len(population))
-    return children + np.random.choice(population, len(population) - len(children))
+        return random.sample(children, len(population))
+    return children + random.sample(population, len(population) - len(children))

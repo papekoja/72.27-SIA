@@ -12,73 +12,62 @@ from src.mutation_operators import mutate_population
 from src.replacement_methods import replacement_method
 from src.selection_methods import selection_method
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-character_type = str(config['GeneticAlgorithm']['character_type'])
 
-
-def genetic_algorithm(population_amount, number_iterations, selection_method1, selection_method2, selection_amount,
-                      selection_probability, replacement_method1, replacement_method2, replacement_probability, pm,
-                      multi_gen, uniform):
+def genetic_algorithm(population_amount, character_type, selection_method1, selection_method2, selection_amount,
+                      selection_probability, crossing_method, mutation_probability, multi_gen, uniform,
+                      replacement_method1, replacement_method2, replacement_probability, number_iterations,
+                      acceptable_solution, structure_percentage, by_content):
     population = []
-    generation_tracker = {}
+    generation_tracker = []
     generation = 0
-    total_sum = 0
     selection_number1 = math.ceil(selection_amount * selection_probability)
     selection_number2 = selection_amount - selection_number1
     replacement_number1 = math.ceil(population_amount * replacement_probability)
     replacement_number2 = population_amount - replacement_number1
-    generational_change = 0 if uniform else 1
 
     # Generation 1
     for i in range(population_amount):
         s, a, e, r, h, height = random_stats_generator()
         population.append(Character(character_type, s, a, e, r, h, height))
-        total_sum += population[i].get_fitness()
 
-    generation_tracker[generation] = total_sum / population_amount
+    generation_tracker.append(
+        {"fitness": max(population, key=lambda x: x.get_fitness()).get_fitness(), "population": population})
 
     # Generation 2 to n
-    # Here, implement the selection method.
-    for generation in range(1, number_iterations + 1):
+    while check_end_condition(generation_tracker, generation, number_iterations, acceptable_solution,
+                              structure_percentage, by_content):
+        generation += 1
         children = []
-        generational_change *= generation
 
         # SELECTION
-        selected_population1 = selection_method(population, selection_method1, selection_number1)
-        selected_population2 = selection_method(population, selection_method2, selection_number2)
+        selected_population1 = selection_method(population, selection_method1, selection_number1, generation)
+        selected_population2 = selection_method(population, selection_method2, selection_number2, generation)
         selected_population = selected_population1 + selected_population2
 
         # CROSSING
         for i, j in zip(range(0, selection_amount, 2), range(1, selection_amount, 2)):
             parent1 = selected_population[i]
             parent2 = selected_population[j]
-            ch1, ch2, = crossing_operator(parent1, parent2, True, False, "one_point")
+            ch1, ch2, = crossing_operator(parent1, parent2, crossing_method)
             children.append(ch1)
             children.append(ch2)
 
         # MUTATION
-        mutate_population(children, pm, generational_change, multi_gen)
+        mutate_population(children, mutation_probability, multi_gen)
+        mutation_probability *= 1 if uniform else 0.9
 
         # REPLACEMENT
         new_population1 = replacement_method(population, replacement_method1, children)
-        new_population1 = np.random.choice(new_population1, replacement_number1)
+        new_population1 = random.sample(new_population1, replacement_number1)
         new_population2 = replacement_method(population, replacement_method2, children)
-        new_population2 = np.random.choice(new_population2, replacement_number2)
+        new_population2 = random.sample(new_population2, replacement_number2)
         population = new_population1 + new_population2
 
-        total_fitness = sum(character.get_fitness() for character in population)
-        generation_tracker[generation] = total_fitness / population_amount
+        generation_tracker.append(
+            {"fitness": max(population, key=lambda x: x.get_fitness()).get_fitness(), "population": population})
 
-    print(generation_tracker)
-
-
-def avg_fitness(fitness_dict):
-    total_fitness = sum(fitness_dict.values())  # Sum of all fitness values
-    num_characters = len(fitness_dict)  # Number of characters in the dictionary
-    average_fitness = total_fitness / num_characters
-
-    return average_fitness
+    for gen in generation_tracker:
+        print(gen["fitness"])
 
 
 def random_stats_generator():
@@ -98,6 +87,31 @@ def random_stats_generator():
     height = random.uniform(1.3, 2.0)
 
     return strength, agility, expertise, resistance, health, height
+
+
+def check_end_condition(generation_tracker, generation, number_iterations, acceptable_solution, structure_percentage,
+                        by_content):
+    if acceptable_solution > 0:
+        return True
+    elif structure_percentage > 0:
+        if generation < number_iterations:
+            return True
+    elif by_content:
+        if generation < number_iterations:
+            return True
+        last_generations = generation_tracker[-number_iterations]
+        first_fitness = last_generations[0]["fitness"]
+        return all(gen["fitness"] == first_fitness for gen in last_generations)
+        # for i in range(len(last_generations)):
+        #     for j in range(i + 1, len(last_generations)):
+        #         fitness1 = last_generations[i]["fitness"]
+        #         fitness2 = last_generations[j]["fitness"]
+        #         if abs(fitness1 - fitness2) > 5:
+        #             return True
+        # return False
+    elif number_iterations is not None:
+        return generation < number_iterations
+    return False
 
 # Se generan dos hijos por pareja, de ellos se toma uno random
 # De la poblacion vieja se toma la mitad tambien

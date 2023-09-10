@@ -7,9 +7,11 @@ class Character:
     #The gene2 is the binary representation of the height of the character.
     def __init__(self, type, strength, agility, expertise, resistance, health, height, gene1=None, gene2=None):
         self.type = type
-        self.gene1 = []
-        self.gene2 = []
+        self.gene1 = gene1
+        self.gene2 = gene2
         if not gene1 and not gene2:
+            self.gene1 = []
+            self.gene2 = []
             self.strength = strength
             self.agility = agility
             self.expertise = expertise

@@ -2,18 +2,17 @@ import random
 import numpy as np
 
 
-def mutate_population(children, pm, generational_change, multi_gen=False):
-    change_probability = pm + generational_change
+def mutate_population(children, mutation_probability, multi_gen=False):
     for child in children:
         if not multi_gen:
-            if random.random() < change_probability:
+            if random.random() < mutation_probability:
                 mutate_gene(child, random.randint(0, 149))
-            elif random.random() < change_probability:
+            elif random.random() < mutation_probability:
                 mutate_gene(child, random.randint(150, 155))
         else:
-            if random.random() < change_probability:
+            if random.random() < mutation_probability:
                 mutate_gene(child, random.randint(0, 149))
-            if random.random() < change_probability:
+            if random.random() < mutation_probability:
                 mutate_gene(child, random.randint(150, 155))
 
 

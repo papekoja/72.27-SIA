@@ -10,7 +10,7 @@ from src.character import Character
 PROBABILISTIC_TOURNAMENT_VALUE = 0.75
 
 
-def selection_method(population, selection_algorithm, selection_number):
+def selection_method(population, selection_algorithm, selection_number, generation):
     if selection_algorithm == "elite":
         return elite_selection(population, selection_number)  # Return the result of elite selection
     elif selection_algorithm == "roulette":
@@ -18,7 +18,7 @@ def selection_method(population, selection_algorithm, selection_number):
     elif selection_algorithm == "universal":
         return universal_selection(population, selection_number)
     elif selection_algorithm == "boltzmann":
-        return boltzmann_selection(population, selection_number)
+        return boltzmann_selection(population, selection_number, generation)
     elif selection_algorithm == "determinist_tournament":
         return determinist_tournament_selection(population, selection_number)
     elif selection_algorithm == "probabilistic_tournament":
@@ -45,7 +45,7 @@ def roulette_selection(population, selection_number):
     total_fitness = sum(individual.get_fitness() for individual in population)
     relative_fitness = [individual.get_fitness() / total_fitness for individual in population]
     accumulated_fitness = list(accumulate(relative_fitness))
-    random_numbers = [random.random for _ in range(selection_number)]
+    random_numbers = [random.random() for _ in range(selection_number)]
     for number in random_numbers:
         index = bisect.bisect_left(accumulated_fitness,
                                    number)  # Find the index where number should be inserted in accumulated_fitness
@@ -125,7 +125,7 @@ def determinist_tournament_selection(population, selection_number):
     random.shuffle(population)
     m = 3
     while len(selected_population) < selection_number:
-        sample = np.random.choice(population, m)
+        sample = random.sample(population, m)
         sample.sort(key=lambda x: x.get_fitness(), reverse=True)
         selected_population.append(sample[0])
     return selected_population
