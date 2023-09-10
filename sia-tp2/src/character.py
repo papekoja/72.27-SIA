@@ -57,14 +57,14 @@ class Character:
                 + str(self.height) + ')')
 
     def get_fitness(self):
-        strengh_p = 100 * np.tanh(0.01 * self.strength)
+        strength_p = 100 * np.tanh(0.01 * self.strength)
         agility_p = np.tanh(0.01 * self.agility)
         expertise_p = 0.6 * np.tanh(0.01 * self.expertise)
         resistance_p = np.tanh(0.01 * self.resistance)
         life_p = 100 * np.tanh(0.01 * self.health)
         atm = 0.5 - pow((3 * self.height - 5), 4) + pow((3 * self.height - 5), 2) + self.height / 2
         dem = 2 + pow((3 * self.height - 5), 4) - pow((3 * self.height - 5), 2) - self.height / 2
-        attack = (agility_p + expertise_p) * strengh_p * atm
+        attack = (agility_p + expertise_p) * strength_p * atm
         defense = (resistance_p + expertise_p) * life_p * dem
         if self.type == 'warrior':
             return 0.6 * attack + 0.4 * defense
@@ -97,3 +97,6 @@ class Character:
 
     def set_gene2(self, gene2):
         self.gene2 = gene2
+
+    def get_stats(self):
+        return self.type, self.strength, self.agility, self.expertise, self.resistance, self.health, self.height
