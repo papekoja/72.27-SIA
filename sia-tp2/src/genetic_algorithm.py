@@ -31,7 +31,7 @@ def genetic_algorithm(population_amount, character_type, selection_method1, sele
         population.append(Character(character_type, s, a, e, r, h, height))
 
     generation_tracker.append(
-        {"fitness": max(population, key=lambda x: x.get_fitness()).get_fitness(), "population": population})
+        {"max_fitness": max(population, key=lambda x: x.get_fitness()).get_fitness(), "population": population})
 
     # Generation 2 to n
     while check_end_condition(generation_tracker, generation, number_iterations, acceptable_solution,
@@ -64,10 +64,10 @@ def genetic_algorithm(population_amount, character_type, selection_method1, sele
         population = new_population1 + new_population2
 
         generation_tracker.append(
-            {"fitness": max(population, key=lambda x: x.get_fitness()).get_fitness(), "population": population})
+            {"max_fitness": max(population, key=lambda x: x.get_fitness()).get_fitness(), "population": population})
 
     for gen in generation_tracker:
-        print(gen["fitness"])
+        print(gen["max_fitness"])
 
 
 def random_stats_generator():
@@ -92,23 +92,28 @@ def random_stats_generator():
 def check_end_condition(generation_tracker, generation, number_iterations, acceptable_solution, structure_percentage,
                         by_content):
     if acceptable_solution > 0:
-        return True
+        last_generation = generation_tracker[generation]
+        return last_generation["max_fitness"] < acceptable_solution
     elif structure_percentage > 0:
         if generation < number_iterations:
             return True
+        last_generations = generation_tracker[-number_iterations:]
+        last_populations = [last_generation["population"] for last_generation in last_generations]
+        for last_population in last_populations:
+            last_population.sort(key=lambda x: x.get_fitness(), reverse=True)
+        relevant_number = math.ceil(len(last_populations[0]) * structure_percentage)
+        relevant_populations = [last_population[:relevant_number] for last_population in last_populations]
+        for i in range(1, number_iterations):
+            for j in range(relevant_number):
+                if relevant_populations[0][j].get_fitness() != relevant_populations[i][j].get_fitness():
+                    return True
+        return False
     elif by_content:
         if generation < number_iterations:
             return True
-        last_generations = generation_tracker[-number_iterations]
-        first_fitness = last_generations[0]["fitness"]
-        return all(gen["fitness"] == first_fitness for gen in last_generations)
-        # for i in range(len(last_generations)):
-        #     for j in range(i + 1, len(last_generations)):
-        #         fitness1 = last_generations[i]["fitness"]
-        #         fitness2 = last_generations[j]["fitness"]
-        #         if abs(fitness1 - fitness2) > 5:
-        #             return True
-        # return False
+        last_generations = generation_tracker[-number_iterations:]
+        first_fitness = last_generations[0]["max_fitness"]
+        return not all(gen["max_fitness"] == first_fitness for gen in last_generations)
     elif number_iterations is not None:
         return generation < number_iterations
     return False
