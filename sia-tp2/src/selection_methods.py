@@ -45,7 +45,7 @@ def roulette_selection(population, selection_number):
     total_fitness = sum(individual.get_fitness() for individual in population)
     relative_fitness = [individual.get_fitness() / total_fitness for individual in population]
     accumulated_fitness = list(accumulate(relative_fitness))
-    random_numbers = [random.uniform(0, 1) for _ in range(selection_number)]
+    random_numbers = [random.random for _ in range(selection_number)]
     for number in random_numbers:
         index = bisect.bisect_left(accumulated_fitness,
                                    number)  # Find the index where number should be inserted in accumulated_fitness
@@ -65,7 +65,7 @@ def universal_selection(population, selection_number):
     total_fitness = sum(individual.get_fitness() for individual in population)
     relative_fitness = [individual.get_fitness() / total_fitness for individual in population]
     accumulated_fitness = list(accumulate(relative_fitness))
-    random_number = random.uniform(0, 1)
+    random_number = random.random()
     numbers = [(random_number + i) / selection_number for i in range(selection_number)]
     for number in numbers:
         index = bisect.bisect_left(accumulated_fitness,
@@ -105,7 +105,7 @@ def boltzmann_selection(population, selection_number, generation):  # TODO see w
     total_pseudo_fitness = sum(pseudo_fitness)
     relative_pseudo_fitness = [value / total_pseudo_fitness for value in pseudo_fitness]
     accumulated_pseudo_fitness = list(accumulate(relative_pseudo_fitness))
-    random_numbers = [random.uniform(0, 1) for _ in range(selection_number)]
+    random_numbers = [random.random() for _ in range(selection_number)]
     for number in random_numbers:
         index = bisect.bisect_left(accumulated_pseudo_fitness,
                                    number)  # Find the index where number should be inserted in accumulated_fitness
@@ -142,10 +142,10 @@ def determinist_tournament_selection(population, selection_number):
 
 def probabilistic_tournament_selection(population, selection_number):
     selected_population = []
-    threshold = 0.75  # TODO see what to do with this
+    threshold = PROBABILISTIC_TOURNAMENT_VALUE  # TODO see what to do with this
     while len(selected_population) < selection_number:
         selected_pair = random.sample(population, 2)  # Choose 2 individuals randomly
-        r = random.uniform(0, 1)
+        r = random.random()
         if r < threshold:
             selected_individual = max(selected_pair, key=lambda x: x.get_fitness())
         else:
@@ -175,7 +175,7 @@ def rank_selection(population, selection_number):
     total_pseudo_fitness = sum(pseudo_fitness)
     relative_pseudo_fitness = [value / total_pseudo_fitness for value in pseudo_fitness]
     accumulated_pseudo_fitness = list(accumulate(relative_pseudo_fitness))
-    random_numbers = [random.uniform(0, 1) for _ in range(selection_number)]
+    random_numbers = [random.random() for _ in range(selection_number)]
     for number in random_numbers:
         index = bisect.bisect_left(accumulated_pseudo_fitness,
                                    number)  # Find the index where number should be inserted in accumulated_fitness
