@@ -1,7 +1,8 @@
-import numpy as np
 import math
 import random
 from src.character import Character
+
+ITEM_NUMBER = 15000
 
 
 def crossing_operator(parent1, parent2, crossing_algorithm):
@@ -17,7 +18,7 @@ def crossing_operator(parent1, parent2, crossing_algorithm):
 
 def one_point_crossing(parent1, parent2):
     # GENE 1
-    p = random.randint(0, 149)
+    p = random.randint(0, ITEM_NUMBER)
     child1_new_gene1 = parent1.gene1[0:p] + parent2.gene1[p:]
     child2_new_gene1 = parent2.gene1[0:p] + parent1.gene1[p:]
     # GENE 2
@@ -32,8 +33,8 @@ def one_point_crossing(parent1, parent2):
 
 def two_point_crossing(parent1, parent2):
     # GENE 1
-    p1 = random.randint(0, 149)
-    p2 = random.randint(p1, 149)  # Ensure p2 is greater than p1
+    p1 = random.randint(0, ITEM_NUMBER)
+    p2 = random.randint(p1, ITEM_NUMBER)  # Ensure p2 is greater than p1
     child1_new_gene1 = parent1.gene1[0:p1] + parent2.gene1[p1:p2] + parent1.gene1[:p2]
     child2_new_gene1 = parent2.gene1[0:p1] + parent1.gene1[p1:p2] + parent2.gene1[:p2]
     # GENE 2
@@ -55,14 +56,14 @@ def uniform_crossing(parent1, parent2):
     child2_new_gene2 = []
 
     # GENE 1
-    for i in range(150):
+    for i in range(ITEM_NUMBER):
         if random.random() > 0.5:
             child1_new_gene1.append(parent1.gene1[i])
             child2_new_gene1.append(parent2.gene1[i])
         else:
             child1_new_gene1.append(parent2.gene1[i])
             child2_new_gene1.append(parent1.gene1[i])
-    if len(child1_new_gene1) + len(child1_new_gene1) != 300:
+    if len(child1_new_gene1) + len(child1_new_gene1) != (ITEM_NUMBER * 2):
         raise RuntimeError("Problem in uniform_crossbreed gene1")
     # GENE 2
     for i in range(6):
@@ -83,9 +84,9 @@ def uniform_crossing(parent1, parent2):
 
 def anular_crossing(parent1, parent2):
     # GENE 1
-    p1 = random.randint(0, 149)
-    l = random.randint(0, 75)
-    p2 = (p1 + l) % 150
+    p1 = random.randint(0, ITEM_NUMBER - 1)
+    l = random.randint(0, math.ceil(ITEM_NUMBER / 2))
+    p2 = (p1 + l) % ITEM_NUMBER
     if p1 > p2:
         p1, p2 = p2, p1
     child1_new_gene1 = parent1.gene1[0:p1] + parent2.gene1[p1:p2] + parent1.gene1[:p2]

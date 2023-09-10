@@ -1,11 +1,8 @@
 import bisect
 from itertools import accumulate
 
-import numpy as np
 import math
-import copy
 import random
-from src.character import Character
 
 PROBABILISTIC_TOURNAMENT_VALUE = 0.75
 
@@ -35,8 +32,6 @@ def elite_selection(population, selection_number):
         for i in range(n):
             selected_population.append(individual)
 
-    # population.sort(key=lambda x: x['fitness'], reverse=True)
-    # num_to_select = math.ceil(len(population) / 2)
     return selected_population
 
 
@@ -53,12 +48,6 @@ def roulette_selection(population, selection_number):
 
     return selected_population
 
-    # total_fitness = sum(individual.get_fitness() for individual in population)
-    # relative_fitness = [individual.get_fitness() / total_fitness for individual in population]
-    # selection_probabilities = [individual.get_fitness() / total_fitness for individual in population]
-    # selected_individuals = np.random.choice(population, size=len(population)//2, replace=True, p=selection_probabilities)
-    # return selected_individuals.tolist()
-
 
 def universal_selection(population, selection_number):
     selected_population = []
@@ -73,25 +62,8 @@ def universal_selection(population, selection_number):
         selected_population.append(population[index])
     return selected_population
 
-    # population.sort(key=lambda x: x.get_fitness())
-    # num_individuals = len(population)
-    # selection_probabilities = [individual.get_fitness() for individual in population]
-    # total_fitness = sum(selection_probabilities)
-    # normalized_probabilities = [prob / total_fitness for prob in selection_probabilities]
-    # num_spins = num_individuals // 2
-    # selected_individuals = []
-    # pointer = random.uniform(0, 1 / num_spins)
-    # for _ in range(num_spins):
-    #     while pointer > normalized_probabilities[0]:
-    #         pointer -= normalized_probabilities[0]
-    #         normalized_probabilities.pop(0)
-    #         population.pop(0)
-    #     selected_individuals.append(population[0])
-    #     pointer += 1 / num_spins
-    # return selected_individual
 
-
-def boltzmann_selection(population, selection_number, generation):  # TODO see what to do with t0, tc and k
+def boltzmann_selection(population, selection_number, generation):
     selected_population = []
     t0 = 1000
     tc = 500
@@ -112,13 +84,6 @@ def boltzmann_selection(population, selection_number, generation):  # TODO see w
         selected_population.append(population[index])
     return selected_population
 
-    # fitness_values = [individual.get_fitness() for individual in population]
-    # scaled_fitness = np.array(fitness_values) / temperature
-    # exponentials = np.exp(scaled_fitness)
-    # probabilities = exponentials / np.sum(exponentials)
-    # selected_individuals = np.random.choice(population, size=len(population)//2, replace=True, p=probabilities)
-    # return selected_individuals.tolist()
-
 
 def determinist_tournament_selection(population, selection_number):
     selected_population = []
@@ -130,19 +95,10 @@ def determinist_tournament_selection(population, selection_number):
         selected_population.append(sample[0])
     return selected_population
 
-    # random.shuffle(population)
-    # selected_population = []
-    # k = math.ceil(len(population)/2)
-    # while len(selected_population) < k:
-    #     sample = np.random.choice(population, size=len(population)//3)
-    #     sample.sort(key=lambda x: x.get_fitness(), reverse=True)
-    #     selected_population.append(copy.deepcopy(sample[0]))
-    # return selected_population
-
 
 def probabilistic_tournament_selection(population, selection_number):
     selected_population = []
-    threshold = PROBABILISTIC_TOURNAMENT_VALUE  # TODO see what to do with this
+    threshold = PROBABILISTIC_TOURNAMENT_VALUE
     while len(selected_population) < selection_number:
         selected_pair = random.sample(population, 2)  # Choose 2 individuals randomly
         r = random.random()
@@ -152,19 +108,6 @@ def probabilistic_tournament_selection(population, selection_number):
             selected_individual = min(selected_pair, key=lambda x: x.get_fitness())
         selected_population.append(selected_individual)
     return selected_population
-
-    # selected_individuals = []
-    # threshold_range = (0.5, 1.0)
-    # while len(selected_individuals) < selection_number:
-    #     selected_pair = random.sample(population, 2)  # Choose 2 individuals randomly
-    #     r = random.uniform(0, 1)
-    #     threshold = random.uniform(*threshold_range)  # Random threshold value in the specified range
-    #     if r < threshold:
-    #         selected_individual = max(selected_pair, key=lambda x: x.get_fitness())
-    #     else:
-    #         selected_individual = min(selected_pair, key=lambda x: x.get_fitness())
-    #     selected_individuals.append(copy.deepcopy(selected_individual))
-    # return selected_individuals
 
 
 def rank_selection(population, selection_number):
@@ -181,9 +124,3 @@ def rank_selection(population, selection_number):
                                    number)  # Find the index where number should be inserted in accumulated_fitness
         selected_population.append(population[index])
     return selected_population
-
-    # population.sort(key=lambda x: x.get_fitness())
-    # num_individuals = len(population)
-    # selection_probabilities = [((num_individuals - rank) / (num_individuals * (num_individuals + 1) / 2)) for rank in range(1, num_individuals + 1)]
-    # selected_individuals = random.choices(population, weights=selection_probabilities, k=num_individuals // 2)
-    # return selected_individuals

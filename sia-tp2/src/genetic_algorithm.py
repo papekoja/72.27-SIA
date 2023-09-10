@@ -1,10 +1,5 @@
 import math
 import random
-import copy
-import numpy
-import configparser
-
-import numpy as np
 
 from src.character import Character
 from src.crossing_operators import crossing_operator
@@ -71,22 +66,18 @@ def genetic_algorithm(population_amount, character_type, selection_method1, sele
 
 
 def random_stats_generator():
-    while True:
-        strength = random.randint(1, 100)
-        agility = random.randint(1, 100)
-        expertise = random.randint(1, 100)
-        resistance = random.randint(1, 100)
-        health = random.randint(1, 100)
+    random_numbers = [random.uniform(0, 30) for _ in range(5)]
+    total = sum(random_numbers)
+    normalized_numbers = [num * 150 / total for num in random_numbers]
+    rounded_numbers = [round(num, 2) for num in normalized_numbers]
+    while sum(rounded_numbers) != 150:
+        diff = 150 - sum(rounded_numbers)
+        index_to_adjust = random.randint(0, 4)
+        rounded_numbers[index_to_adjust] += diff
 
-        # Calculate the sum of attributes
-        total = strength + agility + expertise + resistance + health
-
-        # Check if the sum is equal to 150
-        if total == 150:
-            break  # Exit the loop if the constraint is met
     height = random.uniform(1.3, 2.0)
 
-    return strength, agility, expertise, resistance, health, height
+    return rounded_numbers[0], rounded_numbers[1], rounded_numbers[2], rounded_numbers[3], rounded_numbers[4], height
 
 
 def check_end_condition(generation_tracker, generation, number_iterations, acceptable_solution, structure_percentage,
@@ -117,55 +108,3 @@ def check_end_condition(generation_tracker, generation, number_iterations, accep
     elif number_iterations is not None:
         return generation < number_iterations
     return False
-
-# Se generan dos hijos por pareja, de ellos se toma uno random
-# De la poblacion vieja se toma la mitad tambien
-# def genetic_algorithm(population, best_caracter_founded, selection_algorithm, mutation_rate, max_generations, expected_fitness,population_size,fitness_cut):
-#     expected_fitness = validation_fitness(expected_fitness)
-#     closest_fit = 0
-#     generation_maxes = []
-#     gen = 0
-#     populations=[]
-#     while gen < (limit_generation):
-#         max=None
-#         populations.append(copy.deepcopy(population))
-#         parents = copy.deepcopy(population)
-#         selection_method(parents, best_caracter_founded, selection_algorithm)
-#         n = len(parents)
-#         random.shuffle(parents)
-#         if n % 2 == 1:
-#             parents.append(copy.deepcopy(parents[0]))
-#         child_pop=[]
-#         for i in range(0, n, 2):
-#             child1,child2 = uniform_crossbreed(parents[i],parents[i+1])
-#             child_pop.append(child1)
-#             child_pop.append(child2)
-
-#         # nos quedamos con los mejores de la vieja poblacion 
-#         # Mutamos de forma uniforme a la antigua generacion 
-#         uniform_mutation(child_pop,mutation_rate)
-
-#         new_pop = []
-#         new_pop.extend(child_pop)
-
-#         i = 0
-#         while len(new_pop) < population_size and i < len(parents):
-#            new_pop.append(parents[i])
-
-#         max = new_pop[0]
-#         for individual in new_pop:
-#             if individual.get_fitness(best_caracter_founded) > max.get_fitness(best_caracter_founded):
-#                 max = EachColor(individual.red, individual.green, individual.blue,mutation_rate)
-#         generation_maxes.append(max.get_fitness(best_caracter_founded))
-
-#         if(fitness_cut and max.get_fitness(best_caracter_founded) >= expected_fitness):
-#             print("Encontrado en la generacion numero: " + str(gen))
-#             return max,generation_maxes,populations
-
-
-#         population = new_pop
-#         gen += 1
-#         if not fitness_cut and gen >= max_generations:
-#             return max, generation_maxes, populations
-
-#     return max, generation_maxes, populations
