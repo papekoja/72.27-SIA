@@ -7,7 +7,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 # Get the parameters from the config file
-population_amount = int(config['Population']['population_amount'])
+population_amount = config.getint('Population', 'population_amount')
 character_type = str(config['Population']['character_type'])
 
 selection_method1 = str(config['Selection']['selection_method1'])

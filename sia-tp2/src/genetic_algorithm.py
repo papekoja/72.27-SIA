@@ -32,6 +32,7 @@ def genetic_algorithm(population_amount, character_type, selection_method1, sele
     while check_end_condition(generation_tracker, generation, number_iterations, acceptable_solution,
                               structure_percentage, by_content):
         generation += 1
+        print(generation)
         children = []
 
         # SELECTION
@@ -61,8 +62,9 @@ def genetic_algorithm(population_amount, character_type, selection_method1, sele
         generation_tracker.append(
             {"max_fitness": max(population, key=lambda x: x.get_fitness()).get_fitness(), "population": population})
 
-    for gen in generation_tracker:
-        print(gen["max_fitness"])
+    print(generation_tracker[-1]["max_fitness"])
+    character = max(generation_tracker[-1]["population"], key=lambda x: x.get_fitness())
+    print(character)
 
 
 def random_stats_generator():
@@ -84,6 +86,7 @@ def check_end_condition(generation_tracker, generation, number_iterations, accep
                         by_content):
     if acceptable_solution > 0:
         last_generation = generation_tracker[generation]
+        print(last_generation["max_fitness"])
         return last_generation["max_fitness"] < acceptable_solution
     elif structure_percentage > 0:
         if generation < number_iterations:

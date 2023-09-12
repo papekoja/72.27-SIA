@@ -35,13 +35,13 @@ def two_point_crossing(parent1, parent2):
     # GENE 1
     p1 = random.randint(0, ITEM_NUMBER)
     p2 = random.randint(p1, ITEM_NUMBER)  # Ensure p2 is greater than p1
-    child1_new_gene1 = parent1.gene1[0:p1] + parent2.gene1[p1:p2] + parent1.gene1[:p2]
-    child2_new_gene1 = parent2.gene1[0:p1] + parent1.gene1[p1:p2] + parent2.gene1[:p2]
+    child1_new_gene1 = parent1.gene1[0:p1] + parent2.gene1[p1:p2] + parent1.gene1[p2:]
+    child2_new_gene1 = parent2.gene1[0:p1] + parent1.gene1[p1:p2] + parent2.gene1[p2:]
     # GENE 2
     p1 = random.randint(0, 5)
     p2 = random.randint(p1, 5)  # Ensure p2 is greater than p1
-    child1_new_gene2 = parent1.gene2[0:p1] + parent2.gene2[p1:p2] + parent1.gene2[:p2]
-    child2_new_gene2 = parent2.gene2[0:p1] + parent1.gene2[p1:p2] + parent2.gene2[:p2]
+    child1_new_gene2 = parent1.gene2[0:p1] + parent2.gene2[p1:p2] + parent1.gene2[p2:]
+    child2_new_gene2 = parent2.gene2[0:p1] + parent1.gene2[p1:p2] + parent2.gene2[p2:]
 
     child1 = Character(parent1.type, None, None, None, None, None, None, child1_new_gene1, child1_new_gene2)
     child2 = Character(parent1.type, None, None, None, None, None, None, child2_new_gene1, child2_new_gene2)
@@ -89,16 +89,16 @@ def anular_crossing(parent1, parent2):
     p2 = (p1 + l) % ITEM_NUMBER
     if p1 > p2:
         p1, p2 = p2, p1
-    child1_new_gene1 = parent1.gene1[0:p1] + parent2.gene1[p1:p2] + parent1.gene1[:p2]
-    child2_new_gene1 = parent2.gene1[0:p1] + parent1.gene1[p1:p2] + parent2.gene1[:p2]
+    child1_new_gene1 = parent1.gene1[0:p1] + parent2.gene1[p1:p2] + parent1.gene1[p2:]
+    child2_new_gene1 = parent2.gene1[0:p1] + parent1.gene1[p1:p2] + parent2.gene1[p2:]
     # GENE 2
     p1 = random.randint(0, 5)
     l = random.randint(0, 3)
     p2 = (p1 + l) % 6
     if p1 > p2:
         p1, p2 = p2, p1
-    child1_new_gene2 = parent1.gene2[0:p1] + parent2.gene2[p1:p2] + parent1.gene2[:p2]
-    child2_new_gene2 = parent2.gene2[0:p1] + parent1.gene2[p1:p2] + parent2.gene2[:p2]
+    child1_new_gene2 = parent1.gene2[0:p1] + parent2.gene2[p1:p2] + parent1.gene2[p2:]
+    child2_new_gene2 = parent2.gene2[0:p1] + parent1.gene2[p1:p2] + parent2.gene2[p2:]
 
     child1 = Character(parent1.type, None, None, None, None, None, None, child1_new_gene1, child1_new_gene2)
     child2 = Character(parent1.type, None, None, None, None, None, None, child2_new_gene1, child2_new_gene2)

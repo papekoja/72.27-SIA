@@ -26,7 +26,6 @@ class Character:
             while len(self.gene1) < 15000:
                 self.gene1.append('h')
             while len(self.gene1) > 15000:
-                print("entre")
                 self.gene1.pop()
 
             binary_representation = bin(int((height - 1.3) * 100))[

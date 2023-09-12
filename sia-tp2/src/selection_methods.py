@@ -67,7 +67,7 @@ def boltzmann_selection(population, selection_number, generation):
     selected_population = []
     t0 = 1000
     tc = 500
-    k = 1
+    k = 2
     t = tc + (t0 - tc) * math.pow(math.e, -k * generation)
     num_population = len(population)
     average_pseudo_fitness = sum(
@@ -112,7 +112,7 @@ def probabilistic_tournament_selection(population, selection_number):
 
 def rank_selection(population, selection_number):
     selected_population = []
-    population.sort(key=lambda x: x.get_fitness())
+    population.sort(key=lambda x: x.get_fitness(), reverse=True)
     num_population = len(population)
     pseudo_fitness = [((num_population - rank) / num_population) for rank in range(1, num_population + 1)]
     total_pseudo_fitness = sum(pseudo_fitness)
