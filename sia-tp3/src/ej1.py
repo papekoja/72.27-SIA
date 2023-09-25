@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
-from perceptron import Perceptron  # Asegúrate de importar la clase Perceptron desde tu archivo
-
+from perceptron import Perceptron  
 def run():
     # Datos de entrada y salida para la función lógica "Y"
     inputs_and = np.array([[-1, 1, 1], [1, -1, 1], [-1, -1, 1], [1, 1, 1]])
