@@ -7,7 +7,7 @@ class Perceptron:
         self.w2 = np.random.rand()
         self.w3 = np.random.rand()
         self.b = np.random.rand()
-        self.lr = 0.7
+        self.lr = 0.1
         
     def train(self, df):
         for row in df.values:
