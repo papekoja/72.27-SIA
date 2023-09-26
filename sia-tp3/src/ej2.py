@@ -12,7 +12,7 @@ _, df_test = train_test_split(df, test_size=0.5, random_state=42)
 
 
 def run():
-    perceptron.Perceptron.non_linear = True
+    perceptron.Perceptron.non_linear = False
     for i in range(2):
         # Bootstrap Perceptron
         bootstrapping_evaluate()
@@ -22,6 +22,7 @@ def run():
         k_fold_cross_validation_evaluate()
         # Leave One Out Cross Validation Perceptron
         leave_one_out_cross_validation_evaluate()
+        perceptron.Perceptron.non_linear = True
 
 def bootstrapping(sample_size, iterations):
     perceptrons = pd.DataFrame(columns=['w1', 'w2', 'w3', 'b'])

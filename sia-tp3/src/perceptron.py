@@ -23,14 +23,15 @@ class Perceptron:
         else:
             return y
 
-    def sigmoid(x):
+    def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))    
     
     def train(self, df):
         for row in df.values:
+            print(row[3])
             y = self.expected_output(row[3])
             y_pred = self.output(row[0], row[1], row[2])
-            if y_pred != self.expected_output(row[3]):
+            if y_pred != y:
                 self.w1 += self.lr*(y - y_pred)*row[0]
                 self.w2 += self.lr*(y - y_pred)*row[1]
                 self.w3 += self.lr*(y - y_pred)*row[2]
