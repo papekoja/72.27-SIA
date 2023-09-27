@@ -1,63 +1,34 @@
 import numpy as np
-from perceptron_mul import MultilayerPerceptron
-import matplotlib.pyplot as plt
-
-class ej3A:
-    def __init__(self, optimizer="gd"):
-        input_size = 1
-        hidden_size = 4
-        output_size = 1
-        learning_rate = 0.1
-        self.epochs = 10000
-
-        if optimizer == "gd":
-            self.mlp = MultilayerPerceptron(input_size, hidden_size, output_size, learning_rate)
-        elif optimizer == "adam":
-            self.mlp = MultilayerPerceptron(input_size, hidden_size, output_size, learning_rate)
-
-    def train(self, X, y):
-        # Entrenar la red neuronal
-        self.mlp.train(X, y, self.epochs)
-
-    def predict(self, input_data):
-        # Hacer predicciones
-        predictions = self.mlp.predict(input_data)
-        return predictions
+from perceptron_mul import MultilayerPerceptron 
 
 def run():
-    # Datos de entrada
+    # Definir las entradas (X) y las salidas esperadas (y) para la función XOR
     X = np.array([[-1, 1], [1, -1], [-1, -1], [1, 1]])
-    # Etiquetas de salida
-    y = np.array([[1], [1], [-1], [-1]])
+    y = np.array([1, 1, -1, -1])
 
-    # Crear una instancia de ej3A para Gradiente Descendente (gd)
-    gd_model = ej3A(optimizer="gd")
-    # Entrenar el modelo con Gradiente Descendente
-    gd_model.train(X, y)
+    # Definir hiperparámetros
+    input_size = 2
+    hidden_size = 4
+    output_size = 1
+    learning_rate = 0.1
+    epochs = 10000
 
-    # Crear una instancia de ej3A para Adam
-    adam_model = ej3A(optimizer="adam")
-    # Entrenar el modelo con Adam
-    adam_model.train(X, y)
+    # Crear una instancia del perceptrón con Gradiente Descendente
+    mlp_gradient_descent = MultilayerPerceptron(input_size, hidden_size, output_size, learning_rate)
 
-    # Datos de entrada para hacer predicciones
-    input_data = np.array([[1, 1], [-1, 1]])
+    # Entrenar con Gradiente Descendente
+    mlp_gradient_descent.train_with_gradient_descent(X, y.reshape(-1, 1), epochs)
 
-    # Realizar predicciones con Gradiente Descendente
-    gd_predictions = gd_model.predict(input_data)
+    # Crear una instancia del perceptrón con el optimizador Adam
+    mlp_adam = MultilayerPerceptron(input_size, hidden_size, output_size, learning_rate)
 
-    # Realizar predicciones con Adam
-    adam_predictions = adam_model.predict(input_data)
+    # Entrenar con el optimizador Adam
+    mlp_adam.train_with_adam(X, y.reshape(-1, 1), epochs)
 
-    # Crear gráfica comparativa
-    plt.figure(figsize=(10, 5))
-    plt.subplot(1, 2, 1)
-    plt.title("Predicciones con Gradiente Descendente")
-    plt.bar([f"Entrada {i+1}" for i in range(len(gd_predictions))], gd_predictions.flatten())
+    # Probar el modelo entrenado con XOR
+    test_input = np.array([[1, -1]])
+    output_gradient_descent = mlp_gradient_descent.predict(test_input)
+    output_adam = mlp_adam.predict(test_input)
 
-    plt.subplot(1, 2, 2)
-    plt.title("Predicciones con Adam")
-    plt.bar([f"Entrada {i+1}" for i in range(len(adam_predictions))], adam_predictions.flatten())
-
-    plt.tight_layout()
-    plt.show()
+    print("Resultado con Gradiente Descendente:", output_gradient_descent)
+    print("Resultado con Adam:", output_adam)
