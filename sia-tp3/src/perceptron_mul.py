@@ -145,4 +145,5 @@ class MultilayerPerceptron:
                 #if _ % 100 == 0:
                 #    print(f'Epoch {_}, Loss: {loss}')
 
+    
 

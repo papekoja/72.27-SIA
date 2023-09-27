@@ -1,32 +1,41 @@
 import numpy as np
 import pandas as pd
-from perceptron import Perceptron 
- 
+from perceptron import Perceptron
+
 def run():
-    # Datos de entrada y salida para la función lógica "Y"
-    inputs_and = np.array([[-1, 1, 1], [1, -1, 1], [-1, -1, 1], [1, 1, 1]])
-    targets_and = np.array([-1, -1, -1, 1])
+    x_and = np.array([[-1, 1, -1], [1, -1, 1], [-1, -1, -1], [1, 1, 1]])
+    y_and = np.array([-1, -1, -1, 1])
 
-    # Datos de entrada y salida para la función lógica "O exclusivo"
-    inputs_xor = np.array([[-1, 1, 1], [1, -1, 1], [-1, -1, 1], [1, 1, 1]])
-    targets_xor = np.array([1, 1, -1, -1])
+    x_xor = np.array([[-1, 1, -1], [1, -1, 1], [-1, -1, -1], [1, 1, 1]])
+    y_xor = np.array([1, 1, -1, -1])
 
-    # Crear un perceptrón para la función lógica "Y"
+    # Crear y entrenar un Perceptrón para la función "Y"
     perceptron_and = Perceptron()
-    perceptron_and.train(pd.DataFrame({'x1': inputs_and[:, 0], 'x2': inputs_and[:, 1], 'x3': inputs_and[:, 2], 'y': targets_and}))
+    perceptron_and.non_linear = False  # Usar función de activación escalón
+    df_and = pd.DataFrame(data=np.column_stack((x_and, y_and)), columns=['x1', 'x2', 'x3', 'y'])
+    perceptron_and.train(df_and)
 
-    # Crear un perceptrón para la función lógica "O exclusivo"
+    # Crear y entrenar un Perceptrón para la función "O exclusivo"
     perceptron_xor = Perceptron()
-    perceptron_xor.train(pd.DataFrame({'x1': inputs_xor[:, 0], 'x2': inputs_xor[:, 1], 'x3': inputs_xor[:, 2], 'y': targets_xor}))
+    perceptron_xor.non_linear = False  # Usar función de activación escalón
+    df_xor = pd.DataFrame(data=np.column_stack((x_xor, y_xor)), columns=['x1', 'x2', 'x3', 'y'])
+    perceptron_xor.train(df_xor)
 
-    # Probar el perceptrón para la función lógica "Y"
-    result_and, mse_and = perceptron_and.predict(pd.DataFrame({'x1': inputs_and[:, 0], 'x2': inputs_and[:, 1], 'x3': inputs_and[:, 2], 'y': targets_and}))
-    print("Predicciones para la función 'Y':")
+    # Probar los Perceptrones entrenados
+    print("Función lógica 'Y':")
+    perceptron_and.test(df_and)
+    print("Predicciones para 'Y':")
+    result_and = perceptron_and.predict(df_and)
     print(result_and)
-    print("MSE para la función 'Y':", mse_and)
 
-    # Probar el perceptrón para la función lógica "O exclusivo"
-    result_xor, mse_xor = perceptron_xor.predict(pd.DataFrame({'x1': inputs_xor[:, 0], 'x2': inputs_xor[:, 1], 'x3': inputs_xor[:, 2], 'y': targets_xor}))
-    print("\nPredicciones para la función 'O exclusivo':")
+    print("\nFunción lógica 'O exclusivo':")
+    perceptron_xor.test(df_xor)
+    print("Predicciones para 'O exclusivo':")
+    result_xor = perceptron_xor.predict(df_xor)
     print(result_xor)
-    print("MSE para la función 'O exclusivo':", mse_xor)
+
+    # Obtener los pesos de los Perceptrones
+    print("\nPesos del Perceptrón para 'Y':")
+    print(perceptron_and.get_weights())
+    print("\nPesos del Perceptrón para 'O exclusivo':")
+    print(perceptron_xor.get_weights())

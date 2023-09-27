@@ -145,4 +145,3 @@ def mean_squared_error(actual, predicted):
 def mean_absolute_error(actual, predicted):
     return np.mean(np.abs(actual - predicted))
     
-run()
