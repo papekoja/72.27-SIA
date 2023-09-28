@@ -54,6 +54,7 @@ class MultilayerPerceptron:
         return output
     
     def train_with_gradient_descent(self, X, y, epochs):
+        train_loss_history = []
         for _ in range(epochs):
             # Propagación hacia adelante (Forward Pass)
             hidden_input = np.dot(X, self.weights_input_hidden) + self.bias_hidden
@@ -63,6 +64,8 @@ class MultilayerPerceptron:
 
             # Cálculo de la pérdida
             loss = np.mean(0.5 * (y - output) ** 2)
+            average_loss = np.mean(loss)
+            train_loss_history.append(average_loss)
 
             # Retropropagación y ajuste de pesos
             d_output = (y - output) * self.sigmoid_derivative(output)
@@ -73,7 +76,7 @@ class MultilayerPerceptron:
             self.bias_output += np.sum(d_output, axis=0, keepdims=True) * self.learning_rate
             self.weights_input_hidden += X.T.dot(d_hidden) * self.learning_rate
             self.bias_hidden += np.sum(d_hidden, axis=0, keepdims=True) * self.learning_rate
-
+        return train_loss_history
             #if _ % 100 == 0:
             #    print(f'Epoch {_}, Loss: {loss}')
 

@@ -6,7 +6,7 @@ import ej3C
 
 
 print('-----------EJERCICIO 1-----------')
-#ej1.run()
+ej1.run()
 print('-----------EJERCICIO 2-----------')
 #ej2.run()
 print('-----------EJERCICIO 3A-----------')
@@ -14,4 +14,4 @@ print('-----------EJERCICIO 3A-----------')
 print('-----------EJERCICIO 3B-----------')
 #ej3B.run()
 print('-----------EJERCICIO 3C-----------')
-ej3C.run()
+#ej3C.run()

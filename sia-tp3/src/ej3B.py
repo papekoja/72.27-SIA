@@ -49,7 +49,7 @@ def run():
     labels = np.array([1 if np.sum(row) % 2 == 0 else 0 for row in data]).reshape(-1, 1)
 
     # Dividir el conjunto de datos en entrenamiento y prueba (por ejemplo, 80% entrenamiento y 20% prueba)
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.8, random_state=42)
     
     mlp = MultilayerPerceptron(input_size, hidden_size, output_size, learning_rate)
 
@@ -87,8 +87,10 @@ def run():
         adam_loss_history.append(loss)
         adam_accuracy_history.append(accuracy)
 
-        #if epoch % 100 == 0:
-        #    print(f'Epoch {epoch}, Loss: {loss}, Accuracy: {accuracy * 100:.2f}%')
+        if epoch % 100 == 0:
+            print(f'Epoch {epoch}, Loss: {loss}, Accuracy: {accuracy * 100:.2f}%')
 
     # Plot Adam training results
     plot_training_results(adam_loss_history, adam_accuracy_history, 'Adam')
+
+run()
