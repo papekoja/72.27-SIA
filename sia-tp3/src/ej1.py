@@ -40,3 +40,4 @@ def run():
     print("\nPesos del Perceptrón para 'O exclusivo':")
     print(perceptron_xor.get_weights())
 
+run()

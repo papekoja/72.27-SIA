@@ -6,7 +6,7 @@ import ej3C
 
 
 print('-----------EJERCICIO 1-----------')
-#ej1.run()
+ej1.run()
 print('-----------EJERCICIO 2-----------')
 ej2.run()
 print('-----------EJERCICIO 3A-----------')
