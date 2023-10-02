@@ -28,7 +28,6 @@ class Perceptron:
     
     def train(self, df):
         for row in df.values:
-            print(row[3])
             y = self.expected_output(row[3])
             y_pred = self.output(row[0], row[1], row[2])
             if y_pred != y:
