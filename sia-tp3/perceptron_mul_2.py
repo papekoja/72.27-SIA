@@ -98,17 +98,28 @@ def generate_data(qty, noise_precentage):
     Y = []
     for i in range(qty):
         n = np.random.randint(0, 10)
-        X.append(numbers[n].flatten())
+        pic = noise_data(numbers[n], noise_precentage)
+        X.append(pic.flatten())
         Y.append(n)
     X = np.array(X)
     Y = np.array(Y)
     return X.T, Y
 
+def noise_data(X, precentage):
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            if np.random.rand() < precentage:
+                X[i][j] = 1 if X[i][j] == 0 else 0
+    return X
+
 p = perceptron_mul_2()
 X_train, Y_train = generate_data(1000, 0)
 X_test, Y_test = generate_data(1000, 0)
 
-p.gradient_descent(X_train, Y_train , 200, 0.1)
+for i in range(20):
+    print("X: ", X_train[:, i], "Y: ", Y_train[i])
+
+p.gradient_descent(X_train, Y_train , 300, 0.1)
 
 predictions = p.make_predictions(X_test)
 for i in range(10):
