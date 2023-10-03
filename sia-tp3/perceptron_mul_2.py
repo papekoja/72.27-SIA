@@ -22,13 +22,13 @@ numbers = np.array(numbers)
 class perceptron_mul_2:
     def __init__(self):
         # Create weights for the first layer (input is 0th). 10 neurons, 35 inputs(5x7)
-        self.W1 = np.random.rand(10, 35)
+        self.W1 = np.random.rand(10, 35) - 0.5
         # Create bias for first layer
-        self.B1 = np.random.rand(10, 1)
+        self.B1 = np.random.rand(10, 1) - 0.5
         # Create weights for the second layer (input is 1st). 10 neurons, 10 inputs
-        self.W2 = np.random.rand(10, 10)
+        self.W2 = np.random.rand(10, 10) - 0.5
         # Create bias for second layer
-        self.B2 = np.random.rand(10, 1)
+        self.B2 = np.random.rand(10, 1) - 0.5
 
     def relu(self, Z):
         return np.maximum(0, Z)
@@ -76,7 +76,6 @@ class perceptron_mul_2:
         return np.argmax(A2, 0)
     
     def getAccuracy(self, predictions, Y):
-        print(predictions, Y)
         return np.sum(predictions == Y) / Y.size
     
     def gradient_descent(self, X, Y, iternations, alpha):
@@ -86,28 +85,32 @@ class perceptron_mul_2:
             self.uptade_params(dW1, db1, dW2, db2, alpha)
             if i % 50 == 0:
                 print("Iternation: ", i) 
-                print("Accyracy: ", self.getAccuracy(self.get_predictions(A2), Y))
+                print("Accuracy: ", self.getAccuracy(self.get_predictions(A2), Y))
         return self.W1, self.B1, self.W2, self.B2
+    
+    def make_predictions(self, X):
+        _, _, _, A2 = self.forward_prop(X)
+        return self.get_predictions(A2)
+
 
 def generate_data(qty, noise_precentage):
     X = []
     Y = []
     for i in range(qty):
-        rnd = np.random.randint(0, 10)
-        n = noise_picture(numbers[rnd], noise_precentage)
-        X.append(n.flatten())
-        Y.append(rnd)
-    return np.array(X).T, np.array(Y)
-
-def noise_picture(array, flip_probability):
-
-    # Generate a random boolean mask with the same shape as the array
-    random_mask = np.random.random(size=array.shape) < flip_probability
-
-    # Use the mask to flip the values (change ones to zeros and zeros to ones)
-    noisy_array = np.logical_xor(array, random_mask).astype(int)
-    return noisy_array
+        n = np.random.randint(0, 10)
+        X.append(numbers[n].flatten())
+        Y.append(n)
+    X = np.array(X)
+    Y = np.array(Y)
+    return X.T, Y
 
 p = perceptron_mul_2()
-X_train, Y_train = generate_data(50, 0.1)
-p.gradient_descent(X_train, Y_train , 100, 0.1)
+X_train, Y_train = generate_data(1000, 0)
+X_test, Y_test = generate_data(1000, 0)
+
+p.gradient_descent(X_train, Y_train , 200, 0.1)
+
+predictions = p.make_predictions(X_test)
+for i in range(10):
+    print("Prediction: ", predictions[i], "Actual: ", Y_test[i])
+print("Accuracy: ", p.getAccuracy(predictions, Y_test))
