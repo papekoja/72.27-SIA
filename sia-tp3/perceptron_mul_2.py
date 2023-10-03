@@ -17,6 +17,7 @@ data = np.array(data)
 # 7 rows is one image. Split the input array into 7 rows each
 numbers = np.split(data, 10)
 
+# Convert the list of lists into a NumPy array. Each element is a 5x7 matrix where corresponding to a digit
 numbers = np.array(numbers)
 
 class perceptron_mul_2:
@@ -32,12 +33,15 @@ class perceptron_mul_2:
         # Create a variable to control logging
         self.log = False
 
+    #relu activation function for the hidden layer
     def relu(self, Z):
         return np.maximum(0, Z)
     
+    #softmax activation function for the output layer
     def softmax(self, Z):
         return np.exp(Z) / np.sum(np.exp(Z), axis=0)
 
+    # Forward propagation
     def forward_prop(self, X):
         # First layer
         Z1 = self.W1.dot(X) + self.B1
@@ -54,9 +58,11 @@ class perceptron_mul_2:
         one_hot_Y = one_hot_Y.T
         return one_hot_Y
     
+    # Derivative of the relu activation function
     def deriv_relu(self, Z):
         return Z > 0
 
+    # Back propagation
     def back_prop(self, Z1, A1, Z2, A2, X, Y):
         m = Y.size
         one_hot_Y = self.one_hot(Y)
@@ -68,18 +74,22 @@ class perceptron_mul_2:
         db1 = 1 / m * np.sum(dZ1)
         return dW1, db1, dW2, db2
     
+    # Update the weights and bias
     def uptade_params(self, dW1, db1, dW2, db2, learning_rate):
         self.W1 -= learning_rate * dW1
         self.B1 -= learning_rate * db1
         self.W2 -= learning_rate * dW2
         self.B2 -= learning_rate * db2
 
+    # Get the predictions from the output layer
     def get_predictions(self, A2):
         return np.argmax(A2, 0)
     
+    # Get the accuracy of the predictions
     def getAccuracy(self, predictions, Y):
         return np.sum(predictions == Y) / Y.size
     
+    # Train the perceptron with gradient descent
     def gradient_descent(self, X, Y, iternations, alpha):
         for i in range(iternations):
             Z1, A1, Z2, A2 = self.forward_prop(X)
@@ -90,11 +100,13 @@ class perceptron_mul_2:
                 print("Accuracy: ", self.getAccuracy(self.get_predictions(A2), Y))
         return self.W1, self.B1, self.W2, self.B2
     
+    # Test the perceptron with the test data
     def test_predictions(self, X):
         _, _, _, A2 = self.forward_prop(X)
         return self.get_predictions(A2)
 
 
+# Generate data with noise percentage
 def generate_data(qty, noise_precentage):
     X = []
     Y = []
@@ -107,6 +119,7 @@ def generate_data(qty, noise_precentage):
     Y = np.array(Y)
     return X.T, Y
 
+# Add noise to the data
 def noise_data(X, precentage):
     for i in range(X.shape[0]):
         for j in range(X.shape[1]):
@@ -118,9 +131,7 @@ p = perceptron_mul_2()
 X_train, Y_train = generate_data(1000, 0)
 X_test, Y_test = generate_data(1000, 0)
 
-""" for i in range(10):
-    print("Prediction: ", predictions[i], "Actual: ", Y_test[i]) """
-
+# Method to train the perceptron with different configurations
 def run_config(qty_of_data, noise_precentage, iternations, alpha):
     p = perceptron_mul_2()
     X_train, Y_train = generate_data(qty_of_data, noise_precentage)
