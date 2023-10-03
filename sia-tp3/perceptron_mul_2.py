@@ -29,6 +29,8 @@ class perceptron_mul_2:
         self.W2 = np.random.rand(10, 10) - 0.5
         # Create bias for second layer
         self.B2 = np.random.rand(10, 1) - 0.5
+        # Create a variable to control logging
+        self.log = False
 
     def relu(self, Z):
         return np.maximum(0, Z)
@@ -83,12 +85,12 @@ class perceptron_mul_2:
             Z1, A1, Z2, A2 = self.forward_prop(X)
             dW1, db1, dW2, db2 = self.back_prop(Z1, A1, Z2, A2, X, Y)
             self.uptade_params(dW1, db1, dW2, db2, alpha)
-            if i % 50 == 0:
+            if (i % 50 == 0) and (self.log != False):
                 print("Iternation: ", i) 
                 print("Accuracy: ", self.getAccuracy(self.get_predictions(A2), Y))
         return self.W1, self.B1, self.W2, self.B2
     
-    def make_predictions(self, X):
+    def test_predictions(self, X):
         _, _, _, A2 = self.forward_prop(X)
         return self.get_predictions(A2)
 
@@ -116,12 +118,20 @@ p = perceptron_mul_2()
 X_train, Y_train = generate_data(1000, 0)
 X_test, Y_test = generate_data(1000, 0)
 
+""" for i in range(10):
+    print("Prediction: ", predictions[i], "Actual: ", Y_test[i]) """
+
+def run_config(qty_of_data, noise_precentage, iternations, alpha):
+    p = perceptron_mul_2()
+    X_train, Y_train = generate_data(qty_of_data, noise_precentage)
+    X_test, Y_test = generate_data(1000, noise_precentage)
+    p.gradient_descent(X_train, Y_train , iternations, alpha)    
+    predictions = p.test_predictions(X_test)
+    return p.getAccuracy(predictions, Y_test)
+
+accuracies = []
 for i in range(20):
-    print("X: ", X_train[:, i], "Y: ", Y_train[i])
+    accuracies.append(run_config(500, 0.01 * i, 1000 , 0.38))
 
-p.gradient_descent(X_train, Y_train , 300, 0.1)
-
-predictions = p.make_predictions(X_test)
-for i in range(10):
-    print("Prediction: ", predictions[i], "Actual: ", Y_test[i])
-print("Accuracy: ", p.getAccuracy(predictions, Y_test))
+print(accuracies)
+print(max(accuracies), accuracies.index(max(accuracies)))
