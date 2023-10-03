@@ -83,7 +83,7 @@ class perceptron_mul_2:
         for i in range(iternations):
             Z1, A1, Z2, A2 = self.forward_prop(X)
             dW1, db1, dW2, db2 = self.back_prop(Z1, A1, Z2, A2, X, Y)
-            self.W1, self.B1, self.W2, self.B2 = self.uptade_params(dW1, db1, dW2, db2, alpha)
+            self.uptade_params(dW1, db1, dW2, db2, alpha)
             if i % 50 == 0:
                 print("Iternation: ", i) 
                 print("Accyracy: ", self.getAccuracy(self.get_predictions(A2), Y))
