@@ -9,7 +9,8 @@ class Perceptron:
         self.w2 = np.random.rand()
         self.w3 = np.random.rand()
         self.b = np.random.rand()
-        self.lr = 0.1
+        self.lr = 0.5
+
 
     def output(self, x1, x2, x3):
         if self.non_linear:

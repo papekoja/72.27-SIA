@@ -132,17 +132,36 @@ X_train, Y_train = generate_data(1000, 0)
 X_test, Y_test = generate_data(1000, 0)
 
 # Method to train the perceptron with different configurations
+import matplotlib.pyplot as plt
+
+# Modify your `run_config` function to return a list of accuracies during training
 def run_config(qty_of_data, noise_precentage, iternations, alpha):
     p = perceptron_mul_2()
     X_train, Y_train = generate_data(qty_of_data, noise_precentage)
     X_test, Y_test = generate_data(1000, noise_precentage)
-    p.gradient_descent(X_train, Y_train , iternations, alpha)    
-    predictions = p.test_predictions(X_test)
-    return p.getAccuracy(predictions, Y_test)
+    accuracies = []  # Store accuracies during training
+    for i in range(iternations):
+        p.gradient_descent(X_train, Y_train, 1, alpha)
+        predictions = p.test_predictions(X_test)
+        accuracy = p.getAccuracy(predictions, Y_test)
+        accuracies.append(accuracy)
+    return accuracies
 
-accuracies = []
-for i in range(20):
-    accuracies.append(run_config(500, 0.01 * i, 1000 , 0.38))
+# Create lists to store accuracies for different configurations
+accuracies_list = []
+noise_percentages = [0.01 * i for i in range(20)]
 
-print(accuracies)
-print(max(accuracies), accuracies.index(max(accuracies)))
+for noise_percentage in noise_percentages:
+    accuracies = run_config(500, noise_percentage, 1000, 0.38)
+    accuracies_list.append(accuracies)
+
+# Plot accuracy vs. noise percentage
+plt.figure(figsize=(10, 6))
+for i, noise_percentage in enumerate(noise_percentages):
+    plt.plot(range(1000), accuracies_list[i], label=f"Noise {noise_percentage}")
+plt.xlabel("Iterations")
+plt.ylabel("Accuracy")
+plt.legend()
+plt.title("Accuracy vs. Noise Percentage")
+plt.grid(True)
+plt.show()
