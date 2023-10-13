@@ -32,17 +32,34 @@ class Perceptron:
             return y
 
     def sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))    
+        return 1 / (1 + np.exp(-x))
+
+    def sigmoid_derivative(self, x):
+        return x * (1 - x)
     
     def train(self, df):
+        if self.non_linear:
+            self.train_non_linear(df)
+        else:
+            self.train_linear(df)
+    
+    def train_linear(self, df):
         for row in df.values:
             y = self.expected_output(row[3])
             y_pred = self.output(row[0], row[1], row[2])
-            if y_pred != y:
-                self.w1 += self.lr*(y - y_pred)*row[0]
-                self.w2 += self.lr*(y - y_pred)*row[1]
-                self.w3 += self.lr*(y - y_pred)*row[2]
-                self.b += self.lr*(y - y_pred)
+            self.w1 += self.lr*(y - y_pred)*row[0]
+            self.w2 += self.lr*(y - y_pred)*row[1]
+            self.w3 += self.lr*(y - y_pred)*row[2]
+            self.b += self.lr*(y - y_pred)
+
+    def train_non_linear(self, df):
+         for row in df.values:
+            y = self.expected_output(row[3])
+            y_pred = self.output(row[0], row[1], row[2])
+            self.w1 += self.lr*(y - y_pred)*row[0]*self.sigmoid_derivative(y_pred)
+            self.w2 += self.lr*(y - y_pred)*row[1]*self.sigmoid_derivative(y_pred)
+            self.w3 += self.lr*(y - y_pred)*row[2]*self.sigmoid_derivative(y_pred)
+            self.b += self.lr*(y - y_pred)*self.sigmoid_derivative(y_pred)
 
     def train1(self, df):
         for row in df.values:
