@@ -6,11 +6,6 @@ from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import LeaveOneOut
 
-# Read the CSV file into a DataFrame
-df = pd.read_csv('sia-tp3\data\TP3-ej2-conjunto.csv')
-_, df_test = train_test_split(df, test_size=0.5, random_state=42)
-
-
 def bootstrapping(sample_size, iterations):
     perceptrons = pd.DataFrame(columns=['w1', 'w2', 'w3', 'b'])
     for _ in range(iterations):
@@ -131,4 +126,25 @@ def mean_squared_error(actual, predicted):
 
 def mean_absolute_error(actual, predicted):
     return np.mean(np.abs(actual - predicted))
+
+def plot_learning_curve(self):
+    plt.plot(self.training_error_history)
+    plt.xlabel('Epoch')
+    plt.ylabel('MSE')
+    plt.title('Learning Curve')
+    plt.show()
+
+# print the current path
+import os
+print(os.getcwd())
     
+# Read the CSV file into a DataFrame
+df = pd.read_csv('sia-tp3/data/TP3-ej2-conjunto.csv')
+df_train, df_test = train_test_split(df, test_size=0.5, random_state=42)
+
+perceptron = perceptron.Perceptron()
+perceptron.non_linear = False
+perceptron.train(df_train, epochs=100)
+
+# Plot the learning curve
+perceptron.plot_learning_curve()

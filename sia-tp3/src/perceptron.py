@@ -10,6 +10,7 @@ class Perceptron:
         self.w3 = np.random.rand()
         self.b = np.random.rand()
         self.lr = 0.5
+        self.training_error_history = []
 
 
     def output(self, x1, x2, x3):
@@ -37,29 +38,62 @@ class Perceptron:
     def sigmoid_derivative(self, x):
         return x * (1 - x)
     
-    def train(self, df):
-        if self.non_linear:
-            self.train_non_linear(df)
+    def mean_squared_error(self, actual, predicted):
+        return np.mean((actual - predicted)**2)
+    
+    def train(self, df, epochs, tol=1e-5, patience=5):
+        errors = []
+        no_improve = 0  # Counter for epochs with no improvement
+        for i in range(epochs):
+            if self.non_linear:
+                self.train_non_linear(df)
+            else:
+                self.train_linear(df)
+
+            # Assuming df has input features in first 3 columns and output in the 4th.
+            loss = self.mean_squared_error(df.iloc[:, 3].values, y_pred)
+            
+            errors.append(loss)
+            
+            # Check if we should stop early
+            if i > 0:
+                # Compare current loss to previous loss
+                if abs(errors[-1] - errors[-2]) < tol:
+                    no_improve += 1
+                else:  # Reset counter if loss improved
+                    no_improve = 0
+                
+                # If no improvement for 'patience' epochs, stop
+                if no_improve >= patience:
+                    print(f"Early stopping: Loss did not improve for {patience} consecutive epochs.")
+                    break
         else:
-            self.train_linear(df)
+            print(f"Training finished: Maximum epochs ({epochs}) reached.")
     
     def train_linear(self, df):
+        self.training_error_history = []
         for row in df.values:
             y = self.expected_output(row[3])
             y_pred = self.output(row[0], row[1], row[2])
-            self.w1 += self.lr*(y - y_pred)*row[0]
-            self.w2 += self.lr*(y - y_pred)*row[1]
-            self.w3 += self.lr*(y - y_pred)*row[2]
-            self.b += self.lr*(y - y_pred)
+            self.w1 -= self.lr*(y - y_pred)*row[0]
+            self.w2 -= self.lr*(y - y_pred)*row[1]
+            self.w3 -= self.lr*(y - y_pred)*row[2]
+            self.b -= self.lr*(y - y_pred)
+            mse = self.mean_squared_error(y, y_pred)
+            self.training_error_history.append(mse)
+
 
     def train_non_linear(self, df):
-         for row in df.values:
+        self.training_error_history = []
+        for row in df.values:
             y = self.expected_output(row[3])
             y_pred = self.output(row[0], row[1], row[2])
-            self.w1 += self.lr*(y - y_pred)*row[0]*self.sigmoid_derivative(y_pred)
-            self.w2 += self.lr*(y - y_pred)*row[1]*self.sigmoid_derivative(y_pred)
-            self.w3 += self.lr*(y - y_pred)*row[2]*self.sigmoid_derivative(y_pred)
-            self.b += self.lr*(y - y_pred)*self.sigmoid_derivative(y_pred)
+            self.w1 -= self.lr*(y - y_pred)*row[0]*self.sigmoid_derivative(y_pred)
+            self.w2 -= self.lr*(y - y_pred)*row[1]*self.sigmoid_derivative(y_pred)
+            self.w3 -= self.lr*(y - y_pred)*row[2]*self.sigmoid_derivative(y_pred)
+            self.b -= self.lr*(y - y_pred)*self.sigmoid_derivative(y_pred)
+            mse = self.mean_squared_error(y, y_pred)
+            self.training_error_history.append(mse)
 
     def train1(self, df):
         for row in df.values:
@@ -69,8 +103,6 @@ class Perceptron:
                 self.w1 += self.lr*(y - y_pred)*row[0]
                 self.w2 += self.lr*(y - y_pred)*row[1]
                 self.b += self.lr*(y - y_pred)
-
-
 
     def predict(self, df):
         result = pd.DataFrame(columns=['x1', 'x2', 'x3', 'y', 'y_pred'])
@@ -94,7 +126,6 @@ class Perceptron:
     def test1(self, df):
         for row in df.values:
             print("x1:", row[0], " x2:", row[1], " x3:", row[2])
-
 
     def get_weights(self):
         return self.w1, self.w2, self.w3, self.b
